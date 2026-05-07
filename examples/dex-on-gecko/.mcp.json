@@ -1,0 +1,9 @@
+{
+  "$comment": "Default: hosted Streamable HTTP MCP at api.geckovision.tech/mcp. For local dev see .mcp.local.json.",
+  "mcpServers": {
+    "gecko": {
+      "transport": "streamable-http",
+      "url": "https://api.geckovision.tech/mcp/"
+    }
+  }
+}
