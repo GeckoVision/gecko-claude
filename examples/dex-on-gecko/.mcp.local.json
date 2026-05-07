@@ -1,0 +1,10 @@
+{
+  "$comment": "Dev-only fallback: stdio MCP from a sibling gecko-mcpay-api clone.",
+  "mcpServers": {
+    "gecko": {
+      "command": "uv",
+      "args": ["--directory", "../../../gecko-mcpay-api", "run", "gecko-mcp"],
+      "env": {}
+    }
+  }
+}

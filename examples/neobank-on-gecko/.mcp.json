@@ -1,9 +1,9 @@
 {
+  "$comment": "Default: hosted Streamable HTTP MCP at api.geckovision.tech/mcp. Live as of 2026-05-07. Wallet-based x402 auth — no API keys. For local dev against a sibling gecko-mcpay-api clone, see .mcp.local.json.",
   "mcpServers": {
     "gecko": {
-      "command": "uv",
-      "args": ["--directory", "../../../gecko-mcpay-api", "run", "gecko-mcp"],
-      "env": {}
+      "transport": "streamable-http",
+      "url": "https://api.geckovision.tech/mcp/"
     }
   }
 }
