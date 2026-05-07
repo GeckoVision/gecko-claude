@@ -12,7 +12,7 @@ If a step fails, halt and surface the error verbatim. **Do not improvise around 
 |---|---|
 | `claude` CLI installed | `claude --version` |
 | `node` 20+ + `npm` | `node --version` (only needed if you `npm run dev` the placeholder UI) |
-| A Solana wallet with ≥$2 USDC | `gecko-mcp wallet balance` (after install via `install.sh`) — first-call discovery + 5-tool flow runs ~$1.16 IF prod is in `X402_MODE=live`. Currently in stub mode (free), confirm via `curl https://api.geckovision.tech/healthz` and check `payments` field. |
+| A Solana wallet with ≥$2 USDC | **NOT required during the user-test phase.** Production runs in `X402_MODE=stub` intentionally — first-wave users test the full Gecko flow free of charge. The wallet becomes a hard prereq only after the founder flips to `live` mode (see `gecko-mcpay-api` memory for the flip checklist). |
 | Network access to `api.geckovision.tech` | `curl https://api.geckovision.tech/healthz` returns `{"status":"ok"}` |
 
 If you need a wallet, run the public installer first:
