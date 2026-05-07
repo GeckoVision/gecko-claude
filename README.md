@@ -106,6 +106,10 @@ After your `gecko_research` lands, five pre-baked personas help you build:
 | `extract-page.md` | Paid Tavily Extract (~$0.004/URL) for bot-walled pages. |
 | `fund-wallet.md` | Wallet topping-up flow. |
 
+## Examples
+
+- [`examples/neobank-on-gecko/`](./examples/neobank-on-gecko/) — minimal app showing a builder consuming Gecko via MCP to scaffold a Solana neobank.
+
 ## Roadmap
 
 - ✅ **v1** (this repo) — terminal-first; project budgets policy-bounded.
