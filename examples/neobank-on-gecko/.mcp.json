@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "gecko": {
+      "command": "uv",
+      "args": ["--directory", "../../../gecko-mcpay-api", "run", "gecko-mcp"],
+      "env": {}
+    }
+  }
+}
