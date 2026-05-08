@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "gecko": {
+      "type": "http",
+      "url": "https://api.geckovision.tech/mcp/"
+    }
+  }
+}
