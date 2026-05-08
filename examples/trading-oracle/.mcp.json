@@ -1,8 +1,9 @@
 {
+  "$comment": "Hosted Streamable HTTP MCP. Mirror of examples/dex-on-gecko/.mcp.json — same endpoint, same transport key.",
   "mcpServers": {
     "gecko": {
-      "type": "http",
-      "url": "https://mcp.geckovision.tech/mcp/"
+      "transport": "streamable-http",
+      "url": "https://api.geckovision.tech/mcp/"
     }
   }
 }
