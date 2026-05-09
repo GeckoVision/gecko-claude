@@ -1,26 +1,63 @@
 ---
 name: gecko
-description: Bootstrap a Gecko-powered project in Claude Code. Installs gecko-mcp, connects the user's frames.ag wallet via email + OTP (no browser), prompts funding, and runs a first paid research call. No API keys, no signup beyond the wallet. 19 tools — research, validation, planning, scaffolding, memory — paid per call via x402 on Solana.
+description: Bootstrap a Gecko-powered project in Claude Code. Installs gecko-mcp, connects the user's frames.ag wallet via email + OTP (no browser), prompts funding, and runs a first paid trade-research call. No API keys, no signup beyond the wallet. The flagship tool is gecko_trade_research — cited verdicts with surviving dissent on Solana DeFi protocols, settled per call in USDC via x402. 19 tools total.
 ---
 
-# Gecko — Builder Bootstrap Platform
+# Gecko — Strategy Layer for Autonomous Agents
 
-> **Wedge:** Gecko produces grounded, adversarial verdicts on pre-ideas — a judgment you can buy, sell, or stake on. Pre-loaded vertical knowledge bases (neobank, DEX, marketplace) served to your AI agent at every build step.
+> **Wedge:** Gecko produces grounded, adversarially-debated verdicts on Solana DeFi questions. Seven specialists debate, the dissenters survive into the response, and every paid call returns a Solana tx hash. Your agent stops trading in the dark.
 
 When a user pastes "Read https://app.geckovision.tech/skill.md and follow the instructions" into Claude Code, you (Claude) walk them through the four steps below. Every cent of payment runs on x402 over Solana via the user's frames.ag wallet.
 
 ## What you're installing
 
-One MCP server (`gecko-mcp`) exposing **19 tools** across research, validation, planning, scaffolding, memory, and economics. Plus a skills registry, 5 sub-agents (`research-analyst`, `market-validator`, `technical-architect`, `validator`, `builder`), and helper skills wrapping the tools + `extract-page` (paid Tavily) + `fund-wallet`.
+One MCP server (`gecko-mcp`) exposing **19 tools**. The flagship is `gecko_trade_research` — paid per call, returns a 7-agent panel verdict + surviving dissent + structured `citations[]` + an on-chain receipt. The other 18 tools are supporting plumbing — memory, classifiers, source catalogs, advisor panels — they exist because the trade panel needs them.
 
-### Tool surface (19)
+### Flagship — trade research (start here)
+
+| Tool | Price | Purpose |
+|---|---|---|
+| `gecko_trade_research` (basic) | **$0.25** | 7-agent panel verdict on a Solana DeFi question + grounded citations. e.g. "Should I deposit USDC into Kamino?" |
+| `gecko_trade_research` (pro) | **$0.75** | Same as basic + CoinGecko-OHLCV `backtest` field on the strategist's intent (entry/exit/horizon) |
+
+Both routes return a `TradePanelVerdict` envelope:
+
+```json
+{
+  "verdict": "act | pass | defer",
+  "confidence": 0.0-1.0,
+  "key_drivers": [...],
+  "blocker_questions": [...],
+  "surviving_dissent": [{"voice": "risk_manager", "text": "..."}],
+  "citations": [
+    {"id": 1, "source": "...", "url": "...", "chunk_id": "...",
+     "provider_kind": "paysh_live | bazaar_live | coingecko | ...",
+     "freshness_tier": "static | daily | live_only",
+     "snippet": "..."}
+  ],
+  "turns": [...],            // per-agent transcript
+  "backtest": {              // pro tier only
+    "realized_pnl_pct": ..., "sharpe": ...,
+    "max_drawdown_pct": ..., "sample_days": ...,
+    "unbacktestable": false
+  }
+}
+```
+
+**Verify the surface is live without installing anything:**
+
+```bash
+curl -fsSL https://app.geckovision.tech/test.sh | bash
+```
+
+### Supporting tools — research, advisor panels, memory
 
 **Paid (x402):**
 
 | Tool | Price | Purpose |
 |---|---|---|
-| `gecko_research` (basic) | **$20.00** | Discover sources → index → generate business plan + validation + PRD with citations |
-| `gecko_research` (pro) | **$0.75** | Same as basic + 5-voice adversarial debate (analyst, critic, architect, scoper, judge) + market_landscape + surviving_dissent + dated falsifiers |
+| `gecko_research` (basic) | $0.10 | General-purpose research session — discover sources, index, generate cited business plan + validation report + V1/V2/V3 PRD |
+| `gecko_research` (pro) | $0.75 | Same + 5-voice adversarial debate (analyst, critic, architect, scoper, judge) + market_landscape + surviving_dissent + dated falsifiers |
 | `gecko_classify` | $0.10 | Classify an idea into Gecko's taxonomy + return a suggested-source list with priority weights |
 | `gecko_plan` | $0.25 | Run the 5-voice Advisor Panel against an existing session — sprint plan with surviving dissent |
 | `gecko_advise` | $0.05 | Run a single advisor voice (CEO / CTO / business_manager / product_manager / staff_manager) — 1 LLM call |
@@ -70,45 +107,50 @@ Otherwise:
 
 ## Step 3 — Fund the wallet
 
-Print: `https://frames.ag/u/<username>` and tell the user "Open this in your browser to fund your wallet via Coinbase Onramp (PIX in Brazil, card/bank elsewhere). $5 USDC covers ~6 pro research sessions or ~50 advisor plans. Come back here when funded."
+Print: `https://frames.ag/u/<username>` and tell the user "Open this in your browser to fund your wallet via Coinbase Onramp (PIX in Brazil, card/bank elsewhere). $5 USDC covers ~6 pro trade-research calls (\$0.75 each), or ~20 basic calls (\$0.25), or ~50 advisor plans. Come back here when funded."
 
 Optionally invoke the `fund-wallet` skill for full instructions on funding alternatives.
 
-After they confirm funding: `gecko-mcp wallet balance` to verify. Don't proceed to Step 4 until balance > the session price they're about to invoke.
+After they confirm funding: `gecko-mcp wallet balance` to verify. Don't proceed to Step 4 until balance > the call price they're about to invoke.
 
-## Step 4 — First research
+## Step 4 — First trade-research call
 
-Suggest:
+Suggest the canonical first call:
 
 ```
-Use gecko_research to validate: <their idea, prompt if they don't have one>
+Use gecko_trade_research on Kamino with the question "should I deposit USDC into the USDC reserve right now?" — pro tier
 ```
 
-Quote the price up-front. Default tier is `basic` ($20). For the demo or a price-sensitive user, suggest `tier="pro"` ($0.75) — surprisingly cheaper because pro is currently demo-priced to drive adoption of the 5-voice debate.
+Quote the price up-front: **$0.75** for pro (with `backtest` field), **$0.25** for basic. Default to pro for the first call — the surviving-dissent + backtest is the part of the product worth seeing first.
 
-On approval, the MCP tool fires; payment settles in 5-10s; the workflow runs ~60s; full ResearchResult lands in your context (business_plan, validation_report, prd, sources, session_id, x402_tx_signature).
+On approval, the MCP tool fires; payment settles in ~1.6s on Solana mainnet; the 7-agent panel runs ~30-60s; the full `TradePanelVerdict` lands in your context (verdict, confidence, key_drivers, surviving_dissent, citations, turns, backtest).
 
 After the result lands, show:
+- The `tx_hash` from the receipt — paste it as `https://solscan.io/tx/<sig>` for the user to verify.
 - `gecko-mcp economics <session_id>` — cost/margin breakdown with the on-chain tx.
-- Solana Explorer URL for the tx signature.
+- The `surviving_dissent[]` array. **This is the wedge.** Read at least one dissent voice to the user verbatim — that's the part a generic LLM never gives you.
 
-Hand off to the `research-analyst` sub-agent for exploration, or the `market-validator` if the user wants to stress-test the validation report. For a deeper sprint plan, suggest `gecko_plan` ($0.25). For a shareable artifact, suggest `gecko_report` ($0.05) → returns standalone HTML.
+For follow-ups, suggest `gecko_ask` (\$0.01 post-quota, free under quota) to drill into a specific citation.
 
 ## A 60-second demo flow
 
 If the user wants a quick end-to-end taste, run this exact sequence:
 
 ```
-gecko_classify({ idea: "<their idea>" })                              # $0.10 — taxonomy + source list
-gecko_research({ idea: "<their idea>", tier: "pro",                   # $0.75 — full 5-voice debate
-                 tier_preset: "balanced" })
+gecko_trade_research({                                                # $0.75 — pro tier with backtest
+  idea: "Should I deposit USDC into Kamino's USDC reserve right now?",
+  protocol: "kamino",
+  vertical: "dex",
+  tier: "pro"
+})
 gecko_ask({ session_id: "<from above>",
-            question: "Who are the top 3 competitors?" })             # $0.01 (or free under quota)
-gecko_plan({ session_id: "<same>", tier_preset: "balanced" })         # $0.25 — sprint plan
-gecko_report({ session_id: "<same>", format: "html" })                # $0.05 — shareable artifact
+            question: "What's the actual util curve kink threshold?" })  # $0.01 (or free under quota)
+gecko_report({ session_id: "<same>", format: "html" })                   # $0.05 — shareable artifact
 ```
 
-Total: **~$1.16 USDC** in ~5 minutes. The `gecko_report` HTML is the artifact you share with partners or paste into a Colosseum / Stellar37 application.
+Total: **~$0.81 USDC** in ~90 seconds. The `gecko_report` HTML is the artifact you share with partners or paste into a Colosseum / Stellar37 application.
+
+For non-trading research (early-stage idea validation, not a DeFi decision), use `gecko_research` instead of `gecko_trade_research`. Same flow, different vertical surface.
 
 ## Notes for Claude Code
 
@@ -116,33 +158,37 @@ Total: **~$1.16 USDC** in ~5 minutes. The `gecko_report` HTML is the artifact yo
 - The `~/.agentwallet/config.json` file is `chmod 600` and gitignored. Never commit.
 - Surface frames.ag errors verbatim: `POLICY_DENIED`, `WALLET_FROZEN`, `insufficient_funds`, `PAYMENT_REJECTED`. Don't paraphrase. Each has a short remediation in `CLAUDE.md`.
 - First-time users almost always need Step 3. Don't skip it; the demo dies on insufficient funds.
+- Don't list all 19 tools to the user up-front — lead with `gecko_trade_research` and surface the others only when the question calls for them.
 - Browse other Gecko skills at `https://app.geckovision.tech/skills/`.
 
-## Hosted Streamable HTTP MCP — *rolling out*
+## Hosted Streamable HTTP MCP
 
-Coming soon at `https://mcp.geckovision.tech/mcp`. Lets MCP-only hosts (Cursor, Claude Desktop, Manus) skip the local install entirely. Your wallet is still the auth — same x402 payment flow, but the server runs in the cloud. When live, paste this into your MCP config:
+Live at `https://api.geckovision.tech/mcp/`. Lets MCP-only hosts (Cursor, Claude Desktop, Manus) skip the local install entirely. Your wallet is still the auth — same x402 payment flow, but the server runs in the cloud. Drop a `.mcp.json` in any project root:
 
 ```json
 {
   "mcpServers": {
     "gecko": {
-      "transport": "streamable-http",
-      "url": "https://mcp.geckovision.tech/mcp"
+      "type": "http",
+      "url": "https://api.geckovision.tech/mcp/"
     }
   }
 }
 ```
 
-Status: check `https://app.geckovision.tech/status` before relying on this in production.
+19 tools auto-mount, including `gecko_trade_research`. No `install.sh`, no `uv tool install`. The hosted surface is the path of least resistance for a first call.
+
+Status: check `https://app.geckovision.tech/test.sh` (one-line smoke against the live API) before relying on this in production.
 
 ---
 
 ## Change log
 
-- **v3 (2026-05-07):** tool count 3 → **19** (full surface visible to Claude Code now); added `paysh_manifest` + `paysh_live` retrieval sources (pay.sh — 5 meta-skills + 72 catalog providers, 21 neobank-relevant); added `bazaar_manifest` + `bazaar_live` retrieval sources (Coinbase Agentic Wallet marketplace — 50 of 683 services pinned, 8 neobank-relevant); hosted Streamable HTTP MCP at `mcp.geckovision.tech/mcp` rolling out.
+- **v4 (2026-05-09):** repositioned as **strategy layer for autonomous agents**. `gecko_trade_research` promoted to flagship — cited verdicts with `surviving_dissent[]` and structured `citations[]` (id, source, url, chunk_id, provider_kind, freshness_tier, snippet). Pro tier ships with `backtest` field (CoinGecko OHLCV replay on the strategist's intent). Mainnet x402 settlement live. ALB idle bumped to 120s for cold-start panel runs. Hosted MCP at `api.geckovision.tech/mcp/` is the recommended path. `gecko_research` basic price corrected from a documentation typo: it's $0.10, not $20.
+- v3 (2026-05-07): tool count 3 → 19 (full surface visible to Claude Code now); added `paysh_manifest` + `paysh_live` retrieval sources (pay.sh — 5 meta-skills + 72 catalog providers, 21 neobank-relevant); added `bazaar_manifest` + `bazaar_live` retrieval sources (Coinbase Agentic Wallet marketplace — 50 of 683 services pinned, 8 neobank-relevant); hosted Streamable HTTP MCP at `mcp.geckovision.tech/mcp` rolling out.
 - v2 (2026-04-15): added `gecko_classify`, `gecko_route`, `gecko_advise`, `gecko_plan`, memory tools.
 - v1 (2026-03-01): initial 3 tools (`research`, `ask`, `sources`).
 
 ---
 
-*Builder Bootstrap Platform · geckovision.tech · No API keys. Just a wallet.*
+*Strategy Layer for Autonomous Agents · geckovision.tech · No API keys. Just a wallet.*

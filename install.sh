@@ -36,7 +36,7 @@ set -euo pipefail
 # Pinned release tag. Bump in lockstep with packages/gecko-mcp/pyproject.toml
 # in gecko-mcpay-api when a new release is published. Do NOT use `latest` or
 # `main` — pipe-to-bash installers must be reproducible.
-GECKO_MCP_VERSION="${GECKO_MCP_VERSION:-0.1.6}"
+GECKO_MCP_VERSION="${GECKO_MCP_VERSION:-0.2.25}"
 
 GECKO_MCP_REPO="${GECKO_MCP_REPO:-}"
 GECKO_CLAUDE_REPO="${GECKO_CLAUDE_REPO:-ernanibmurtinho/gecko-claude}"
