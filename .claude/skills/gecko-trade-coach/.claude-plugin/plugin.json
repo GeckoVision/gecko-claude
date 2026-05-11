@@ -1,0 +1,25 @@
+{
+  "name": "gecko-trade-coach",
+  "description": "Conversational trade-strategy coach — every rule grounded by Gecko's verdict oracle (surviving dissent + investor-canon citations + on-chain freshness). Emits a JSON strategy spec with citation IDs baked into every rule.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Gecko",
+    "github": "ernanibmurtinho"
+  },
+  "license": "MIT",
+  "keywords": [
+    "trade-coach",
+    "strategy-builder",
+    "oracle",
+    "verdict",
+    "dissent",
+    "citations",
+    "investor-canon",
+    "x402",
+    "solana",
+    "dex",
+    "mcp",
+    "gecko"
+  ],
+  "repository": "https://github.com/ernanibmurtinho/gecko-claude"
+}

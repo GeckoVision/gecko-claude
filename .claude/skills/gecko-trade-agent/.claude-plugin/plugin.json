@@ -1,0 +1,22 @@
+{
+  "name": "gecko-trade-agent",
+  "description": "User-facing wrapper for the local `bb trade-agent` runtime. Deploy, list, inspect, pause, stop self-hosted advisor agents whose entry candidates are grounded by Gecko's verdict oracle. v0.1 is advisor-only — opportunities are journaled, never signed.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Gecko",
+    "github": "ernanibmurtinho"
+  },
+  "license": "MIT",
+  "keywords": [
+    "trade-agent",
+    "runtime",
+    "advisor-mode",
+    "lifecycle",
+    "x402",
+    "solana",
+    "dex",
+    "mcp",
+    "gecko"
+  ],
+  "repository": "https://github.com/ernanibmurtinho/gecko-claude"
+}

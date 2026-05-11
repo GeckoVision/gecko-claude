@@ -1,0 +1,33 @@
+schema_version: 1
+name: gecko-trade-coach
+version: "0.1.0"
+description: "Conversational trade-strategy coach — every rule grounded by Gecko's verdict oracle (surviving dissent + investor-canon citations + on-chain freshness). Emits a JSON strategy spec with citation IDs baked into every rule. Mirrors starter-coach shape; differentiates on grounding."
+author:
+  name: "Gecko"
+  github: "ernanibmurtinho"
+license: MIT
+category: trading-strategy
+tags:
+  - trade-coach
+  - strategy-builder
+  - oracle
+  - verdict
+  - dissent
+  - investor-canon
+  - citations
+  - x402
+  - solana
+  - dex
+  - mcp
+  - gecko
+components:
+  skill:
+    dir: .
+api_calls:
+  - tool: gecko_trade_research
+    description: "Gecko verdict oracle MCP tool; called at every meaningful coach decision and as the final go-live gate."
+    paid: true
+    pricing:
+      basic_usdc: 0.25
+      pro_usdc: 0.75
+type: community-developer

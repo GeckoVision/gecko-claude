@@ -1,0 +1,28 @@
+schema_version: 1
+name: gecko-trade-agent
+version: "0.1.0"
+description: "User-facing wrapper for the local `bb trade-agent` runtime. Deploys, lists, inspects, pauses, and stops self-hosted advisor agents grounded by Gecko's verdict oracle. v0.1 advisor-only; trader mode deferred to v0.2."
+author:
+  name: "Gecko"
+  github: "ernanibmurtinho"
+license: MIT
+category: trading-strategy
+tags:
+  - trade-agent
+  - runtime
+  - advisor-mode
+  - x402
+  - solana
+  - mcp
+  - gecko
+components:
+  skill:
+    dir: .
+api_calls:
+  - tool: gecko_trade_research
+    description: "Gecko verdict oracle MCP tool. The runtime uses it twice — a scheduled basic refresh per day, and a pro-tier startup verdict on agent boot (cache-first; charged on miss). The skill itself does not call the oracle directly; the runtime invokes it on the user's behalf."
+    paid: true
+    pricing:
+      basic_usdc: 0.25
+      pro_usdc: 0.75
+type: community-developer

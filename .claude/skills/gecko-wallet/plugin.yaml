@@ -1,0 +1,32 @@
+schema_version: 1
+name: gecko-wallet
+version: "0.1.0"
+description: "Wallet co-pilot. Routes natural-language wallet ops to the OKX OnchainOS peer skills, with judgment-grounded calls to Gecko's verdict oracle when the user's intent carries a 'should I' decision. Never holds keys, never executes directly."
+author:
+  name: "Gecko"
+  github: "ernanibmurtinho"
+license: MIT
+category: trading-strategy
+tags:
+  - wallet
+  - wallet-copilot
+  - intent-router
+  - oracle
+  - verdict
+  - dissent
+  - grounded-swap
+  - x402
+  - solana
+  - dex
+  - mcp
+  - gecko
+components:
+  skill:
+    dir: .
+api_calls:
+  - tool: gecko_trade_research
+    description: "Gecko verdict oracle MCP tool; called only when the user's wallet intent carries a value-judgment ('should I swap', 'is now a good time to bridge')."
+    paid: true
+    pricing:
+      basic_usdc: 0.25
+type: community-developer

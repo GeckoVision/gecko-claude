@@ -84,6 +84,20 @@ curl -fsSL https://app.geckovision.tech/test.sh | bash
 | `gecko_resume` | Recap a project's recent loop activity — last advisor panel + last pulse deltas |
 | `gecko_project_economics` | Per-project: privy wallet address, USDC balance, budget cap + spend, recent paid sessions |
 
+### Companion skills — coach, wallet, agent (v0.1)
+
+Three Claude Code skills compose around `gecko_trade_research` to make the trade-vertical experience deployable on the user's own machine.
+
+| Skill | What it does | When to invoke |
+|---|---|---|
+| `gecko-trade-coach` | Multi-step conversational strategy builder. Every decision grounded by an oracle call. Emits a schema-validated JSON strategy spec with citation IDs baked into every rule. | "Build me a trading strategy" / "help me think through a Solana DeFi position" |
+| `gecko-wallet` | Natural-language wallet co-pilot. Routes to `okx-agentic-wallet` / `okx-dex-swap` for execution; calls `gecko_trade_research` when the intent carries judgment ("should I top up", "is now a good time to bridge"). Never holds keys. | "I need some SOL to finish this", "fund my agent", "should I bridge USDC to Base" |
+| `gecko-trade-agent` | Wraps the local `bb trade-agent` CLI. Deploy a coach-emitted spec as a long-running advisor process on the user's machine; surfaces opportunities, never auto-signs (v0.1). | "Deploy strategy X", "show my agents", "what is my agent doing", "stop agent Y" |
+
+Cost shape: oracle calls inside the coach + wallet skills cost the same `$0.25 basic / $0.75 pro` per `gecko_trade_research` invocation. The trade-agent runtime adds scheduled re-verdicts (1 basic/day + ~3 triggered) — ~$1.50/day per running agent. All cache-first; identical ideas don't double-charge.
+
+These skills are auto-installed by `install.sh` — they ship alongside the MCP server.
+
 ## Step 1 — Run the installer
 
 ```bash

@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://app.geckovision.tech/schemas/gecko-trade-coach/v0.1.0.json",
+  "title": "GeckoTradeStrategySpec",
+  "description": "A deployable DEX spot-trade strategy whose every rule is grounded by a Gecko verdict. Coach emits this; backtest harness + paper-trade + live executors consume it.",
+  "type": "object",
+  "required": [
+    "name",
+    "version",
+    "vertical",
+    "protocol",
+    "entry",
+    "exit",
+    "sizing",
+    "risk",
+    "oracle_grounding"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "author": {
+      "type": "object",
+      "required": ["wallet"],
+      "properties": {
+        "wallet": { "type": "string" },
+        "display_name": { "type": "string" }
+      }
+    },
+    "vertical": { "type": "string", "enum": ["dex"] },
+    "protocol": {
+      "type": "string",
+      "description": "Target DEX or protocol — e.g. okx, jupiter, kamino, raydium, orca, meteora. Coach derives from user profile."
+    },
+    "chain": {
+      "type": "string",
+      "enum": ["solana", "x-layer", "ethereum", "base", "arbitrum", "bsc", "polygon"]
+    },
+    "entry": {
+      "type": "object",
+      "required": ["primitive", "params"],
+      "properties": {
+        "primitive": {
+          "type": "string",
+          "enum": ["dca", "buy_dip", "momentum_follow", "smart_money_copy", "snipe_new", "grid"]
+        },
+        "params": { "type": "object" },
+        "rule_id": { "type": "string" }
+      }
+    },
+    "exit": {
+      "type": "object",
+      "required": ["primitive", "params"],
+      "properties": {
+        "primitive": {
+          "type": "string",
+          "enum": ["take_profit", "trailing_stop", "time_based", "verdict_flip", "drawdown_stop"]
+        },
+        "params": { "type": "object" },
+        "rule_id": { "type": "string" }
+      }
+    },
+    "sizing": {
+      "type": "object",
+      "required": ["primitive", "params"],
+      "properties": {
+        "primitive": {
+          "type": "string",
+          "enum": ["fixed_usd", "percent_bankroll", "kelly_fraction", "verdict_confidence_scaled"]
+        },
+        "params": { "type": "object" },
+        "rule_id": { "type": "string" }
+      }
+    },
+    "filter": {
+      "type": "object",
+      "description": "Optional pre-entry filter — token risk, liquidity threshold, freshness tier, etc.",
+      "properties": {
+        "min_liquidity_usd": { "type": "number", "minimum": 0 },
+        "max_holder_concentration_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "require_oracle_act": { "type": "boolean", "default": true },
+        "block_honeypot": { "type": "boolean", "default": true }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "required": ["max_concurrent_positions", "max_single_position_pct", "max_daily_loss_pct"],
+      "properties": {
+        "max_concurrent_positions": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "max_single_position_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "max_daily_loss_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+        "circuit_breaker_on_dissent_strength": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "If the oracle returns surviving_dissent with strength >= this value, halt new entries for the day."
+        }
+      }
+    },
+    "oracle_grounding": {
+      "type": "object",
+      "description": "REQUIRED. The wedge — every rule decision in this spec is backed by a verdict from gecko_trade_research.",
+      "required": ["tool", "rule_verdicts"],
+      "properties": {
+        "tool": { "type": "string", "const": "gecko_trade_research" },
+        "rule_verdicts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["rule_id", "verdict_id", "verdict", "citations"],
+            "properties": {
+              "rule_id": { "type": "string" },
+              "verdict_id": { "type": "string" },
+              "verdict": { "type": "string", "enum": ["act", "pass", "defer"] },
+              "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+              "citations": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "chunk_ids from the Gecko investor-canon + on-chain corpus."
+              },
+              "dissent_id": { "type": "string" },
+              "acknowledged_by_user": {
+                "type": "boolean",
+                "description": "True if the user shipped a rule with a `pass` verdict, having acknowledged the surviving dissent."
+              }
+            }
+          }
+        },
+        "session_verdict_id": {
+          "type": "string",
+          "description": "The pro-tier verdict id from the final go-live oracle call."
+        },
+        "session_tier": { "type": "string", "enum": ["basic", "pro"] }
+      }
+    },
+    "backtest": {
+      "type": "object",
+      "description": "Populated by the backtest harness, not the coach.",
+      "properties": {
+        "window_days": { "type": "integer", "minimum": 7 },
+        "gated_sharpe": { "type": "number" },
+        "ungated_sharpe": { "type": "number" },
+        "gated_max_dd_pct": { "type": "number" },
+        "ungated_max_dd_pct": { "type": "number" },
+        "gated_pnl_pct": { "type": "number" },
+        "ungated_pnl_pct": { "type": "number" }
+      }
+    },
+    "paper_trade": {
+      "type": "object",
+      "description": "Populated by the paper-trade harness.",
+      "properties": {
+        "candidates_evaluated": { "type": "integer" },
+        "candidates_acted": { "type": "integer" },
+        "paper_pnl_pct": { "type": "number" }
+      }
+    },
+    "execution_rail": {
+      "type": "string",
+      "enum": ["okx-agentic-wallet", "sendai", "backpack", "spec-only"],
+      "description": "Where the spec dispatches on `go live`. `spec-only` means no execution wired."
+    },
+    "published": {
+      "type": "object",
+      "description": "Set when the spec is published to the Attested Alpha Registry partner.",
+      "properties": {
+        "registry": { "type": "string" },
+        "strategy_id": { "type": "string" },
+        "published_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

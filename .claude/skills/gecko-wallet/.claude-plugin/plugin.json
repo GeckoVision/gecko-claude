@@ -1,0 +1,25 @@
+{
+  "name": "gecko-wallet",
+  "description": "Gecko's wallet co-pilot. Natural-language wallet ops grounded by Gecko's verdict oracle when value-judgment is needed. Routes to okx-agentic-wallet / okx-dex-swap / okx-dapp-discovery / okx-onchain-gateway for execution; never holds keys, never executes directly.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Gecko",
+    "github": "ernanibmurtinho"
+  },
+  "license": "MIT",
+  "keywords": [
+    "wallet",
+    "wallet-copilot",
+    "intent-router",
+    "oracle",
+    "verdict",
+    "dissent",
+    "grounded-swap",
+    "x402",
+    "solana",
+    "dex",
+    "mcp",
+    "gecko"
+  ],
+  "repository": "https://github.com/ernanibmurtinho/gecko-claude"
+}
