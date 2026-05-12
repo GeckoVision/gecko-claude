@@ -70,7 +70,7 @@ The agent reports heartbeat, journal, and a re-cached panel verdict in ~5 second
 
 | Existing surface | Sells | Picks a side? |
 |---|---|---|
-| Marketplaces ([frames.ag](https://frames.ag), Bazaar) | **Directories** of paid agents | ❌ Would have to take a side on every listing |
+| Marketplaces ([frames.ag](https://frames.ag), Bazaar, PaySH) | **Directories** of paid agents | ❌ Would have to take a side on every listing |
 | LLM chat (ChatGPT, Claude, Perplexity) | **Conversation** | ❌ Sycophant by default — tells you what you want to hear |
 | Vector DBs (Pinecone, Weaviate) | **Retrieval** | ❌ No verdict; just chunks |
 | **Gecko** | **The verdict** + dissent + citations + on-chain proof | ✅ |
