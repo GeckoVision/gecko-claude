@@ -190,7 +190,8 @@ cat <<'EOF'
       Read https://app.geckovision.tech/skill.md and follow the instructions.
 
   Claude will walk you through wallet setup (email + OTP), funding,
-  and your first research call.
+  and your first paid verdict from the 7-voice panel.
 
-  Builder Bootstrap Platform · geckovision.tech · No API keys, just a wallet.
+  Strategy oracle for autonomous trading agents · geckovision.tech
+  No API keys, just a wallet.
 EOF
