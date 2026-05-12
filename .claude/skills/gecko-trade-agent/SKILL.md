@@ -61,8 +61,35 @@ Every user intent in class A resolves to one `bb trade-agent` subcommand. The sk
 | "Pause new entries on `<id>`" | `bb trade-agent pause <id>` | `agent <id> paused — existing positions still managed, no new entries` |
 | "Resume `<id>`" / "unpause" | `bb trade-agent up --spec <original-spec> --agent-id <id>` (re-up; see lifecycle) | `agent <id> running` |
 | "Stop `<id>`" | `bb trade-agent stop <id>` | `agent <id> stopped — foreground process will exit on next status poll` |
+| "Fire a verdict now" / "what's the panel saying right now" / "force a re-check" | `bb trade-agent reverdict <id> --tier basic` | `verdict=<act\|pass\|defer>  confidence=<f>  citations=<n>  dissent=<n>` (journaled as `verdict_called` event) |
+| "Get a pro verdict on the strategy" | `bb trade-agent reverdict <id> --tier pro` | same shape + `backtest` field present in the cached verdict |
+| "Clean up old stopped agents" / "purge orphans" | `bb trade-agent purge --status stopped` | per-row `PURGED <id>` lines |
+| "What would purge delete" | `bb trade-agent purge --dry-run` | per-row `WOULD PURGE <id>` lines, no deletion |
 
 The runtime's `up` is foreground for v0.1. The user should run it in a `tmux` / `screen` / `systemd --user` / `launchd` wrapper for durability. Surface this on the first `up` of a session.
+
+### Running `up` from inside Claude Code
+
+When the user asks to deploy from a Claude Code chat (not their own terminal), `bb trade-agent up` is a long-running foreground process and CANNOT be invoked as a blocking shell call — Claude's Bash tool will hang waiting for it to exit.
+
+Two acceptable patterns:
+
+1. **Recommended — background mode.** Invoke the Bash tool with `run_in_background: true`. Claude returns immediately with the agent_id parsed from the boot line; the user can `inspect` from chat afterward. Stopping happens via `bb trade-agent stop <id>` (state-only), then the background process exits cleanly on its next poll.
+
+2. **Acceptable — point the user at a fresh terminal.** If background mode isn't supported in the harness, surface the exact `bb trade-agent up …` command and tell the user: *"Run this in a separate terminal (or `tmux new -s gecko-agent`). I'll inspect and reverdict from here."*
+
+Never block the chat on a foreground `up`. If the harness doesn't background well, do pattern 2.
+
+### Demo flow inside Claude Code
+
+For a 90-second demo from a single chat session:
+
+1. User: *"Deploy my Kamino DCA strategy at `~/.gecko/specs/example-kamino-dca.json` in advisor mode."* → invoke `bb trade-agent up …` in background mode; parse + return agent_id.
+2. User: *"What's it doing?"* → `bb trade-agent inspect <id>` → surface status + heartbeat + journal.
+3. User: *"Fire a verdict right now."* → `bb trade-agent reverdict <id> --tier basic` → returns verdict + citations + dissent in ~30s; re-inspect to show the journal entry landed.
+4. User: *"Stop the agent."* → `bb trade-agent stop <id>` (state-only flip; the background process exits on next status poll).
+
+This is the v0.1 demo loop. No terminal switch required.
 
 ### Lifecycle confirmations are loud
 

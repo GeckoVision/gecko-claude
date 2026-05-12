@@ -122,6 +122,51 @@ agent <id> marked stopped
 
 Skill echo MUST include: "foreground process will exit on next status poll — typically within a tick (~30s)". After running, optionally run `inspect` and surface the updated status.
 
+## `reverdict` — fire a manual verdict cycle (demo-friendly)
+
+```
+bb trade-agent reverdict <agent_id> [--tier basic|pro] [--dry-run | --live]
+```
+
+Forces a manual oracle cycle on-demand instead of waiting on the 24h scheduled cadence. Looks up the agent's spec from `agent_state`, calls the oracle with `trigger=manual + force_refresh=True`, writes the result to `agent_verdict_cache`, and journals `verdict_called`.
+
+| Flag | Effect | When |
+|---|---|---|
+| (default) | Talks to prod `/trade_research` with stub-signature. Free in current prod posture. Returns real verdict + real citations. | **Demo + dogfood path** |
+| `--dry-run` | Uses in-process stub caller. No network. Synthetic `act` verdict. | Fastest sanity check |
+| `--live` | Real x402 signing — NOT WIRED in v0.1. Raises `OraclePaymentRequired`. | Reserved for v0.2 |
+| `--tier basic` | $0.25 single-pass verdict | Default |
+| `--tier pro` | $0.75 — includes `backtest` field in the cached verdict | Higher-fidelity demo |
+
+Expected stdout (default mode, against prod):
+
+```
+firing manual basic verdict for <agent_id> (protocol=<p>, idea='session:<spec_name>')...
+  verdict=<act|pass|defer>  confidence=<0.0-0.85>  citations=<n>  dissent=<n>
+```
+
+Skill echo MUST: after running, run `inspect <id>` and surface the new `verdict_called` journal entry so the user sees the cycle landed durably. This is the load-bearing artifact of the demo loop.
+
+## `purge` — clean up orphan rows
+
+```
+bb trade-agent purge [--status stopped|running|paused|halted] [--dry-run]
+```
+
+Deletes `agent_state` rows by status. Cleans up orphans from earlier runs where SIGKILL prevented the Mongo state update (so `ls` shows a row claiming `running` with no OS process backing it). Default purges `stopped`.
+
+Does NOT delete journal entries — those are TTL-managed at 90 days.
+
+Expected stdout:
+
+```
+PURGED       agent_abc123…
+WOULD PURGE  agent_def456…    (with --dry-run)
+no agents with status='stopped'   (when nothing matches)
+```
+
+Skill echo: surface the count purged. If 0, say so. If the user passes `--status running` without `--dry-run`, double-check: this purges Mongo rows for things that might still be running OS processes — confirm with the user first.
+
 ## resume (no dedicated subcommand)
 
 Resume = `up` with the same `--agent-id` (and original `--spec` path). The runtime re-attaches to the existing state row; the journal is durable, no positions are lost.
