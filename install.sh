@@ -14,7 +14,7 @@
 #   5. Prints next steps — wallet onboarding happens INSIDE Claude Code.
 #
 # Flags:
-#   --force                   Overwrite existing .claude/ directory.
+#   --force                   Overwrite existing .claude/ directory and CLAUDE.md.
 #   --no-mcp-register         Skip the `claude mcp add` step.
 #
 # Env overrides for development (not for end users):
@@ -63,6 +63,16 @@ warn()  { echo "  $(c_yellow !) $*"; }
 fail()  { echo "  $(c_red ✗) $*" >&2; }
 hdr()   { echo; echo "$(c_bold "▸ $*")"; }
 
+# Copy CLAUDE.md from the given source dir, but never silently clobber a
+# user's existing CLAUDE.md — overwrite only when --force was passed.
+copy_claude_md() {
+  if [ -f CLAUDE.md ] && [ "$FORCE" != "true" ]; then
+    warn "CLAUDE.md already exists — keeping yours (re-run with --force to overwrite)"
+  else
+    cp "$1/CLAUDE.md" .
+  fi
+}
+
 # -----------------------------------------------------------------------------
 
 hdr "1/4  Prereqs"
@@ -70,7 +80,9 @@ hdr "1/4  Prereqs"
 case "$(uname -s)" in
   Darwin)  ok "macOS" ;;
   Linux)   ok "Linux" ;;
-  *)       fail "Windows is not supported. Use WSL2: https://learn.microsoft.com/en-us/windows/wsl/install"
+  *)       fail "Windows detected — use the native PowerShell installer instead:"
+           fail "    irm https://app.geckovision.tech/install.ps1 | iex"
+           fail "(or run this script under WSL2: https://learn.microsoft.com/en-us/windows/wsl/install)"
            exit 1 ;;
 esac
 
@@ -149,7 +161,7 @@ if [ -n "$GECKO_CLAUDE_REPO_LOCAL" ]; then
   fi
   echo "  source: $GECKO_CLAUDE_REPO_LOCAL (local)"
   cp -r "$GECKO_CLAUDE_REPO_LOCAL/.claude" .
-  cp "$GECKO_CLAUDE_REPO_LOCAL/CLAUDE.md" .
+  copy_claude_md "$GECKO_CLAUDE_REPO_LOCAL"
   if [ ! -f .mcp.json ]; then
     cp "$GECKO_CLAUDE_REPO_LOCAL/.mcp.json.template" .mcp.json
   fi
@@ -161,7 +173,7 @@ else
   curl -fsSL "$TAR_URL" | tar -xz -C "$TMP"
   EXTRACTED=$(find "$TMP" -maxdepth 1 -mindepth 1 -type d | head -1)
   cp -r "$EXTRACTED/.claude" .
-  cp "$EXTRACTED/CLAUDE.md" .
+  copy_claude_md "$EXTRACTED"
   if [ ! -f .mcp.json ]; then
     cp "$EXTRACTED/.mcp.json.template" .mcp.json
   fi
