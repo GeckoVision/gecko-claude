@@ -111,6 +111,18 @@ Three Claude Code skills auto-installed by `install.sh`. They make the oracle de
 
 Cost shape: oracle calls inside the coach + wallet skills cost the same $0.25 / $0.75. The trade-agent runtime adds scheduled re-verdicts (1 basic/day + ~3 triggered/day) — ~$1.50/day per running agent. All cache-first; identical ideas don't double-charge.
 
+## Due-diligence skills (rigor layer above other marketplaces)
+
+Standalone skills that grade other people's bots / traders / strategies — the rigor layer above any marketplace that ranks by raw cumulative PnL. Live at `app.geckovision.tech/skills/`.
+
+| Skill | What it does | When to invoke |
+|---|---|---|
+| `gecko-copy-trade-grader` | Pulls live OKX `smartmoney` leaderboards, computes Sharpe + Sortino + true max-DD + catastrophic-rate + stability + selection-deflated Sharpe, outputs A/B/C/D grade with reasoning. Catches the 34% of OKX top-50 that grade D under rigor + the 89% of leaderboard appearances that are period-rotation noise. | "Grade this OKX trader" · "Should I copy [nickname]" · "Run rigor on the OKX leaderboard" · "Most underrated traders" · "Cross-period stability" |
+
+Empirically validated 2026-05-28: of OKX top-50 over 30d, only 5 grade A, 17 grade D, and ~11% of leaderboard appearances are persistently skilled across 30d AND 90d. Documented in `skills/gecko-copy-trade-grader/examples/`.
+
+Pricing (post-MVP): $0.05 USDC per grade via x402 → ~300x ROI vs OKX's $125 min copy size.
+
 ## Supporting MCP tools (you rarely surface these — invoke when called for)
 
 **Paid (x402):**
