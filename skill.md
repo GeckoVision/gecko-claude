@@ -123,6 +123,16 @@ Empirically validated 2026-05-28: of OKX top-50 over 30d, only 5 grade A, 17 gra
 
 Pricing (post-MVP): $0.05 USDC per grade via x402 → ~300x ROI vs OKX's $125 min copy size.
 
+## Security-validation skills (rigor layer on agent safety)
+
+Standalone skills that generate adversarial inputs to test your agent's defenses BEFORE shipping. Built as Gecko's own internal QA process for adopting on-chain security partners (Bento Guard); released MIT so any Solana agent team can run the same test on their own stack.
+
+| Skill | What it does | When to invoke |
+|---|---|---|
+| `gecko-honeypot-generator` | Generates 112+ adversarial inputs across 5 attack classes — typo variants, unicode lookalikes (Cyrillic Р→P), hidden zero-width chars, mint substitution (same symbol, different mint), contract honeypot patterns (sell-disabled, tax-100%, hidden mint authority, etc). Outputs a JSON corpus consumable by any pre-flight security SDK. Run BEFORE shipping. | "Generate adversarial inputs for my trading agent" · "Test my bot against honeypot tokens" · "Show me typo variants of PYTH" · "Validate my pre-flight security check" |
+
+Empirical signal from our own bot (2026-05-28): static allowlist catches 92% of the 112-input corpus; the 8% bypass is ALL mint substitution — the class that only pre-flight TX simulation can catch. That 8% is the empirical case for adopting an on-chain guardrail like Bento Guard. The catch rate of `(your stack + your guardrail)` on the corpus is your auditable safety claim.
+
 ## Supporting MCP tools (you rarely surface these — invoke when called for)
 
 **Paid (x402):**
