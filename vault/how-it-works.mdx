@@ -1,0 +1,24 @@
+---
+title: "How the vault works"
+description: "Park realized profit in Kamino yield with a safety monitor on top."
+---
+
+The **profit vault** is where realized trading profit goes to compound — like staking, but monitored. It's optional and separate from the trading path.
+
+## Flow
+1. The agent realizes profit from trading.
+2. Profit is allocated across your **profile basket** (conservative / moderate / aggressive).
+3. Each leg passes the **vault gate** (won't deposit into a position the monitor would exit).
+4. The **yield-safety monitor** watches every lot on cadence and acts on verdicts (EXIT / DELEVERAGE / ROTATE / HOLD).
+
+## Profiles
+
+| Profile | Basket |
+|---|---|
+| conservative | 100% USDC lend (no liquidation surface) |
+| moderate | 60% JitoSOL/SOL 4× · 40% USDC lend |
+| aggressive | 50% JitoSOL/SOL 8× · 30% JLP/USDC 3.2× · 20% lend |
+
+Conservative lend earns ~5.8% with no liquidation risk. Leverage earns the **spread** (`net_apy = yield + spread × (leverage − 1)`) — more yield, real liquidation risk, watched by the monitor.
+
+<Card title="The safety monitor" href="/vault/safety-monitor">How the vault protects itself.</Card>

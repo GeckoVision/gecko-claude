@@ -1,0 +1,27 @@
+# Gecko — safety & verification layer for trading agents
+
+> Every trade gated, every yield position monitored. The oracle that tells you when the agent is wrong.
+> Non-custodial (OKX Agentic Wallet TEE). Pay-as-you-go (x402). Local-first.
+
+Gecko is not a trading bot. It is the verification layer that sits above any trading agent:
+it gates every order against a safety check, monitors every yield position against a hurdle
+rate and a liquidation buffer, and grades strategies with default-REJECT backtest rigor
+(CPCV / PBO / Deflated Sharpe). The bot and the profit vault are proof artifacts, not the product.
+
+## Docs
+- [Introduction](/introduction): the wedge — verification, not another agent
+- [Quickstart](/quickstart): install + connect a local agent in minutes
+- [Concepts](/concepts): oracle vs bot, non-custodial TEE custody, verdict & dissent, hurdle rate, liquidation buffer
+- [Build an Agent](/build/set-a-strategy): strategy spec → backtest → deploy
+- [Backtest rigor](/build/backtest): the §5 verdict — DEPLOY / PAPER ONLY / REJECT, with honest nulls
+- [Profit Vault](/vault/how-it-works): Kamino yield with a safety monitor
+- [The Arena](/arena/overview): based.bid verified-safe agent battle
+- [API Reference](/api/control-plane): the control-plane endpoints
+- [Pricing](/pricing): self-hosted free; hosted pay-as-you-go
+
+## Skills
+- gecko-trade-agent: deploy + run a verified-safe trading agent on your machine
+- gecko-trade-coach: conversational strategy-spec builder
+- gecko-copy-trade-grader: grade any trader/strategy with CPCV/PBO/DSR rigor
+- gecko-honeypot-generator: generate honeypot tokens for defensive security testing
+- gecko-wallet: non-custodial wallet operations (OKX Agentic Wallet TEE)

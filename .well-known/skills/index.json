@@ -1,0 +1,35 @@
+{
+  "$schema": "https://app.geckovision.tech/.well-known/skills/schema.json",
+  "version": "1",
+  "publisher": {
+    "name": "Gecko",
+    "url": "https://app.geckovision.tech"
+  },
+  "skills": [
+    {
+      "name": "gecko-trade-agent",
+      "description": "Deploy + run a verified-safe trading agent on your machine — set a strategy, backtest it, deploy it. Every order passes the safety gate.",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "gecko-trade-coach",
+      "description": "Conversational strategy-spec builder — turn an idea into a schema-validated StrategySpec ready to backtest and deploy.",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "gecko-copy-trade-grader",
+      "description": "Grade any trader or strategy honestly — CPCV, PBO, Deflated Sharpe, default-REJECT discipline.",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "gecko-honeypot-generator",
+      "description": "Generate honeypot tokens for defensive security testing and agent red-teaming.",
+      "files": ["SKILL.md"]
+    },
+    {
+      "name": "gecko-wallet",
+      "description": "Non-custodial wallet operations via the OKX Agentic Wallet TEE — keys never leave the enclave.",
+      "files": ["SKILL.md"]
+    }
+  ]
+}

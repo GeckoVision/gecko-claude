@@ -1,0 +1,52 @@
+---
+title: "Quickstart"
+description: "Install Gecko, launch the control plane, connect the app."
+---
+
+## 1. Install
+
+In Claude Code, point at the skill manifest:
+
+```
+Read https://app.geckovision.tech/skill.md and follow the instructions
+```
+
+Or run the installer directly:
+
+```bash
+curl -fsSL https://app.geckovision.tech/install.sh | bash
+```
+
+This installs the Gecko skills (`gecko-trade-coach`, `gecko-trade-agent`, the grader) and wires the MCP server.
+
+## 2. Launch the control plane
+
+The control plane is the local API the app and your agents talk to. Paper mode by default — no real money, no live settlement.
+
+```bash
+bash launch_control_plane.sh    # serves on :8271
+```
+
+Verify:
+
+```bash
+curl localhost:8271/healthz
+```
+
+## 3. Connect the app (optional)
+
+Set the control URL so the app at `app.geckovision.tech` reads your local agent:
+
+```bash
+export GECKO_AGENT_CONTROL_URL=http://localhost:8271
+```
+
+## What's next
+
+<CardGroup cols={3}>
+  <Card title="Set a strategy" href="/build/set-a-strategy" />
+  <Card title="Backtest it" href="/build/backtest" />
+  <Card title="Deploy it" href="/build/deploy" />
+</CardGroup>
+
+<Note>Everything in Quickstart runs in **paper mode** with `X402_MODE=stub`. Going live with real funds is an explicit, separate step.</Note>

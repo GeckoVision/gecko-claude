@@ -1,0 +1,19 @@
+---
+title: "Concepts"
+description: "The vocabulary: oracle vs bot, custody, verdict & dissent, hurdle rate, liquidation buffer."
+---
+
+## Oracle, not bot
+A **bot** executes. An **oracle** judges. Gecko is the oracle: it produces a *verdict* on whether an action is safe and sound, and any bot — ours or yours — acts on it. The execution venue (OKX, Jupiter, Kamino, based.bid) is swappable plumbing.
+
+## Verdict & dissent
+A verdict is the panel's judgment plus the **surviving dissent** — the strongest argument *against* the action that wasn't refuted. A verdict with no honest dissent is a red flag, not a green light. Backtest verdicts are graded `DEPLOY / PAPER ONLY / REJECT`, and a clean **null** (no edge) is a valid result.
+
+## Non-custodial custody
+Signing happens inside the **OKX Agentic Wallet TEE** — the private key is generated in and never leaves the enclave. Alternatively, a **scoped embedded wallet** (per-tx cap, allowed venues) can be provisioned for one-click onboarding. Either way, Gecko never holds your raw key.
+
+## Hurdle rate
+A yield position must beat a **hurdle** to be worth the risk. Default is a Brazilian CDB-after-tax (~12%); a crypto-only hurdle is ~5.5%. Below the hurdle, the monitor rotates or exits.
+
+## Liquidation buffer
+For any leveraged position, the buffer is `1 − operating_LTV / liquidation_LTV` — how far collateral can fall before liquidation. The monitor compares the buffer to a **predicted downside** (derived from the same market-temperature read that gates trades) and de-leverages or exits before the buffer is breached.

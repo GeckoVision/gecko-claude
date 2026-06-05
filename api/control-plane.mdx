@@ -1,0 +1,29 @@
+---
+title: "Control plane API"
+description: "The local control-plane endpoints the app and your agents talk to."
+---
+
+Base URL (local): `http://localhost:8271`. The OpenAPI spec at `/openapi.json` is the contract.
+
+## Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/healthz` | Liveness + data coverage |
+| GET | `/market-temp` | Current market-temperature (risk-on/off) read |
+| POST | `/backtest` | Grade a strategy (returns the §5 + DEPLOY verdict block) |
+| POST | `/agents` | Deploy a StrategySpec (refused on `REJECT`) |
+| GET | `/agents` | List deployed agents |
+| GET | `/agents/{id}` | Registry doc + live state mirror |
+| POST | `/agents/{id}/start` · `/stop` | Start / stop an agent |
+| GET | `/orchestrator` | Running agents + per-user cap |
+| GET | `/vault` | Profit-vault state: allocation, per-lot net APY + buffer, monitor verdicts |
+| GET | `/arena/board` | Survival Board (bucketed bands) |
+
+## Example
+
+```bash
+curl -s localhost:8271/vault?profile=moderate | jq
+```
+
+<Note>Paper-only control plane. Real settlement is gated behind explicit live mode.</Note>
