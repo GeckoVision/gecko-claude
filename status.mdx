@@ -1,0 +1,56 @@
+---
+title: "Status"
+description: "What's live — every capability below is verified by automated tests in CI."
+---
+
+Every capability below is verified by automated tests in our CI pipeline. We publish what's proven — the rigor is the product.
+
+<Info>**26 verified capabilities** across 6 areas. This page is generated from our internal test-backed inventory.</Info>
+
+## Control plane
+
+- GET /healthz
+- GET /market-temp
+- GET /vault
+- GET /arena/board
+- POST /backtest
+- POST/GET /agents (+ /{id}, start/stop/kill)
+- GET /orchestrator
+- POST/GET /kill (global)
+- GET /wallet · /wallet/balance · /receipts
+- Typed response_model on all endpoints (OpenAPI codegen)
+
+## Safety & verification
+
+- Pre-trade safety gate (check_order + notional/daily caps)
+- Global kill-switch covers Kamino + based.bid paths
+
+## Execution adapters
+
+- Jupiter swap adapter
+- based.bid lbp-buy/sell adapter
+- Kamino live-executor (tx-build sidecar)
+- Kamino paper sink
+
+## Profit vault
+
+- Multiply economics (net_apy, liquidation buffer)
+- Yield-safety monitor (EXIT/DELEVERAGE/ROTATE/HOLD)
+- Vault deposit gate (deny-default)
+- Profile baskets + orchestrator
+- Vault live-executor injection (paper)
+- Pegana depeg-risk → monitor + gate
+
+## Arena
+
+- Survival board (bucketed bands)
+- based.bid candle feed (GeckoTerminal)
+
+## Rigor harness
+
+- CPCV / PBO / DSR / block-bootstrap gate
+- Strategy validations (carry x-sectional, realistic, universe)
+
+---
+
+_Generated 2026-06-06 from the test-backed capability inventory._
