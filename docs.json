@@ -49,6 +49,7 @@
             "group": "Reference",
             "pages": [
               "api/control-plane",
+              "status",
               "pricing"
             ]
           }
