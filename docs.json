@@ -1,0 +1,76 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Gecko",
+  "description": "The safety & verification layer for trading agents. Every trade gated, every yield position monitored.",
+  "colors": {
+    "primary": "#448aff",
+    "light": "#82b1ff",
+    "dark": "#2962ff"
+  },
+  "favicon": "/favicon.png",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Docs",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "concepts"
+            ]
+          },
+          {
+            "group": "Build an Agent",
+            "pages": [
+              "build/set-a-strategy",
+              "build/backtest",
+              "build/deploy"
+            ]
+          },
+          {
+            "group": "The Profit Vault",
+            "pages": [
+              "vault/how-it-works",
+              "vault/safety-monitor",
+              "vault/custody"
+            ]
+          },
+          {
+            "group": "The Arena",
+            "pages": [
+              "arena/overview",
+              "arena/enter"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "api/control-plane",
+              "pricing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Install",
+        "href": "https://app.geckovision.tech/skill.md"
+      }
+    ],
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/ernanibmurtinho/gecko-claude"
+    }
+  },
+  "footer": {
+    "socials": {
+      "website": "https://app.geckovision.tech"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+---
+title: "Deploy & run"
+description: "Deploy a graded spec; the orchestrator runs it; every order passes the gate."
+---
+
+Deploy is **refused** if the strategy's verdict is `REJECT`.
+
+## Deploy
+
+```bash
+curl -s localhost:8271/agents -X POST -H 'Content-Type: application/json' \
+  -d '{"spec": {"strategy_id":"trend_breakout", ...}, "verdict":"PAPER ONLY"}'
+```
+
+Returns an `agent_id` and a launch command. The orchestrator reads the spec, sets env, and starts the runtime — paper by default.
+
+## Manage
+
+| Action | Endpoint |
+|---|---|
+| List agents | `GET /agents` |
+| Agent detail + live state | `GET /agents/{id}` |
+| Start / stop | `POST /agents/{id}/start` · `POST /agents/{id}/stop` |
+| Orchestrator status | `GET /orchestrator` |
+
+## The gate
+Every order the runtime wants to place passes the **pre-trade safety gate** first: market-temperature risk-off check, price-impact cap, deny-default rules. The gate is the wedge — it's what makes a Gecko agent *verified-safe*.
+
+<Note>Paper + `X402_MODE=stub` until you explicitly go live.</Note>

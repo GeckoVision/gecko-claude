@@ -1,0 +1,31 @@
+---
+title: "Backtest (the rigor)"
+description: "Default-REJECT grading — CPCV, PBO, Deflated Sharpe. Honest nulls are valid."
+---
+
+A backtest is **not** a research finding — it's one path through one history. Gecko grades every strategy with selection-bias-aware rigor before it earns a deploy.
+
+## The verdict block
+
+```
+STRATEGY: trend_breakout
+  CPCV median Sharpe:      <value>  (5–95%: [<low>, <high>])
+  CPCV % paths Sharpe < 0: <value>
+  Deflated Sharpe Ratio:   <value>  (DEPLOY needs ≥ 0.95)
+  PBO:                     <value>  (DEPLOY needs < 0.20)
+VERDICT: DEPLOY | PAPER ONLY | REJECT
+```
+
+## Two gates, never confused
+
+- **PAPER-CONTINUE** (keep running on paper): `DSR > 0`, `PBO < 0.5`, fee-adjusted return CI excludes 0 on ≥3 of 5 symbols.
+- **DEPLOY** (real money): the stricter bar — `DSR ≥ 0.95`, `PBO < 0.20`, `%CPCV-paths-Sharpe<0 < 25%`.
+
+A §5 paper pass is **never** a real-money green light. And a **null** — no edge after fees — is a cheap, valid, honest outcome. Most candidates reject. That's the point.
+
+## Run it
+
+```bash
+curl -s localhost:8271/backtest -X POST -H 'Content-Type: application/json' \
+  -d '{"strategy_id":"trend_breakout"}'
+```

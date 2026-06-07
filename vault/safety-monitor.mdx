@@ -1,0 +1,22 @@
+---
+title: "The yield-safety monitor"
+description: "Hurdle rate, spread inversion, liquidation buffer vs predicted downside."
+---
+
+The monitor judges every lot on cadence and emits one of: **EXIT · DELEVERAGE · ROTATE · HOLD**.
+
+## What it checks
+- **Beats the hurdle?** Net APY must clear the hurdle rate (default ~12% fiat-equivalent, ~5.5% crypto-only). Below it → ROTATE or EXIT.
+- **Spread still positive?** Multiply earns the spread between collateral yield and borrow cost. If the spread inverts, the position bleeds → DELEVERAGE / EXIT.
+- **Buffer vs downside.** The liquidation buffer is compared to a **predicted downside** derived from the market-temperature read:
+
+| Market temp | Predicted downside |
+|---|---|
+| risk-off (≤ −0.25) | ~15% |
+| cool (≤ −0.08) | ~8% |
+| neutral / warm / risk-on | none |
+
+If predicted downside approaches the buffer → DELEVERAGE before liquidation can happen.
+
+## The unification
+The **same** risk-off signal that gates new trades also sizes the vault's liquidation watch. One market read protects both the entry and the yield. Watch the vault the way you watch a trade.

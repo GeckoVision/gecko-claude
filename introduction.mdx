@@ -1,0 +1,31 @@
+---
+title: "Introduction"
+description: "Gecko is the safety & verification layer for trading agents — not another agent."
+---
+
+## The wedge
+
+Every trading agent tells you it's winning. **Gecko tells you when it's wrong.**
+
+Gecko is a verification layer that sits *above* any trading agent:
+
+- **Gates every order** against a pre-trade safety check (the market-temperature read, price-impact caps, deny-default rules).
+- **Monitors every yield position** against a hurdle rate and a liquidation buffer — and acts before a position bleeds.
+- **Grades strategies** with default-REJECT backtest rigor (CPCV, PBO, Deflated Sharpe). An honest null is a valid, cheap outcome.
+
+The trading bot and the profit vault you'll see in these docs are **proof artifacts** — they exist to demonstrate the verification layer on live capital. The product is the layer, not the bot.
+
+## Why it matters
+
+The failure mode the product exists to fix: an agent that looks profitable on an in-sample backtest, deployed without rigor, that quietly loses money in chop or gets liquidated on a leverage leg. Gecko is the adult in the room — the part that says *no* when the edge isn't real.
+
+## How it's built
+
+- **Non-custodial.** Signing happens in the OKX Agentic Wallet TEE (keys never leave the enclave) or a scoped embedded wallet. Gecko never holds your private key.
+- **Pay-as-you-go.** Verdicts are priced per call via x402. Self-hosting is free.
+- **Local-first.** Run the agent on your own machine; connect the app as a control surface.
+
+<CardGroup cols={2}>
+  <Card title="Quickstart" href="/quickstart">Install and connect an agent.</Card>
+  <Card title="Concepts" href="/concepts">Oracle vs bot, custody, hurdle, buffer.</Card>
+</CardGroup>

@@ -1,0 +1,27 @@
+---
+title: "Set a strategy"
+description: "Describe a strategy as a schema-validated StrategySpec."
+---
+
+A strategy is a JSON-serializable **StrategySpec**. Two strategy families ship today:
+
+| `strategy_id` | What it does |
+|---|---|
+| `trend_breakout` | Enters on confirmed breakouts with multi-indicator confluence |
+| `mean_reversion` | Fades stretched moves back toward a moving average |
+
+## Shape
+
+```json
+{
+  "strategy_id": "trend_breakout",
+  "universe": ["BTC", "ETH", "SOL"],
+  "venue": "okx_spot",
+  "entry_gates": { "adx_min": 25, "mfi_range": [50, 70] },
+  "exit": { "stop_loss_pct": 1.5, "take_profit_pct": 3.0, "trail_pct": 0.3 }
+}
+```
+
+Build it conversationally with the **gecko-trade-coach** skill, or hand-write it. The spec is the contract that flows through backtest → deploy unchanged.
+
+<Card title="Next: Backtest" href="/build/backtest">Grade the spec before you deploy it.</Card>
