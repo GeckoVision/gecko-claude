@@ -1,0 +1,59 @@
+---
+title: "For AI agents"
+description: "How an AI agent discovers Gecko, reads the contract, and calls it — llms.txt, OpenAPI, MCP, skill.md."
+---
+
+Gecko is built to be used *by* agents — including yours. Everything an agent
+needs to find Gecko, read its contract, and call it is machine-readable.
+
+## Discover
+
+<CardGroup cols={2}>
+  <Card title="llms.txt" href="https://docs.geckovision.tech/llms.txt">
+    The [llmstxt.org](https://llmstxt.org) index — a compact map of these docs for an LLM context window.
+  </Card>
+  <Card title="llms-full.txt" href="https://docs.geckovision.tech/llms-full.txt">
+    The full docs as a single plain-text file — drop it straight into a prompt.
+  </Card>
+  <Card title="OpenAPI spec" href="https://api.geckovision.tech/openapi.json">
+    The machine-readable REST contract (`Gecko API`). Rendered with a live "try it" console in the **API Playground** tab.
+  </Card>
+  <Card title="skill.md" href="https://app.geckovision.tech/skill.md">
+    The Claude Code skill manifest — `curl | bash` to install the MCP tools.
+  </Card>
+</CardGroup>
+
+## Two ways to execute
+
+### 1. The hosted REST API — `https://api.geckovision.tech`
+
+The contract is [`/openapi.json`](https://api.geckovision.tech/openapi.json); every endpoint is rendered with a "try it" console in the **API Playground** tab, and the guided walkthrough lives in [the verdict API](/api/verdict) + [onboarding](/api/onboarding). The minimal verdict loop:
+
+```bash
+# 1. Mint a session for a wallet
+curl -s -X POST https://api.geckovision.tech/v1/onboarding/link \
+  -H 'Content-Type: application/json' \
+  -d '{"wallet_address":"<wallet>"}'        # → { session_token, ... }
+
+# 2. Ask the oracle (the wedge: a pass/defer with surviving dissent + citations)
+curl -s -X POST https://api.geckovision.tech/v1/research \
+  -H "Authorization: Bearer <session_token>" \
+  -H 'Content-Type: application/json' \
+  -d '{"idea":"deposit USDC into Kamino","protocol":"kamino","vertical":"dex"}'
+```
+
+- **Auth:** `Authorization: Bearer <session_token>` on every call after `link`.
+- **Payment:** paid routes settle per-call over **x402** on Solana. In stub mode the path is free; the 402 challenge is advertised at [`/.well-known/x402`](https://api.geckovision.tech/.well-known/x402). See [the verdict API](/api/verdict).
+
+### 2. MCP — call the docs and the tools as an agent
+
+- **Docs MCP:** `https://docs.geckovision.tech/mcp` — a Model Context Protocol server over these docs, so an agent can search and read them as tools.
+- **Gecko MCP:** install via [`skill.md`](https://app.geckovision.tech/skill.md) to get `gecko_trade_research`, `gecko_research`, and the rest wired into a Claude Code session.
+
+## The one rule
+
+Gecko is the **verifier**, not the trader. An agent calls it to find out whether
+an action is safe and sound *before* acting — and a `pass`/`defer` with surviving
+dissent is the product working, not failing. See [Concepts](/concepts).
+
+<Note>Custody is non-custodial throughout — keys live in a TEE or a scoped embedded wallet, and withdrawal is never gated. An agent never hands Gecko a private key.</Note>

@@ -19,7 +19,8 @@
             "pages": [
               "introduction",
               "quickstart",
-              "concepts"
+              "concepts",
+              "ai-agents"
             ]
           },
           {
@@ -72,6 +73,10 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "API Playground",
+        "openapi": "https://api.geckovision.tech/openapi.json"
       }
     ]
   },
