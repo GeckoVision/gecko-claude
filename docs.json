@@ -48,9 +48,27 @@
           {
             "group": "Reference",
             "pages": [
-              "api/control-plane",
               "status",
               "pricing"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Hosted verification API",
+            "pages": [
+              "api/overview",
+              "api/verdict",
+              "api/onboarding"
+            ]
+          },
+          {
+            "group": "Self-hosted",
+            "pages": [
+              "api/control-plane"
             ]
           }
         ]
@@ -66,7 +84,7 @@
     ],
     "primary": {
       "type": "github",
-      "href": "https://github.com/ernanibmurtinho/gecko-claude"
+      "href": "https://github.com/GeckoVision/gecko-claude"
     }
   },
   "footer": {

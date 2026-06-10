@@ -1,0 +1,35 @@
+---
+title: "API overview"
+description: "Two surfaces: the hosted verification API (api.geckovision.tech) and the local control plane."
+---
+
+Gecko exposes two API surfaces. Most integrators want the first.
+
+## The hosted verification API
+
+Base URL: `https://api.geckovision.tech`. This is the **white-label surface** — the endpoints a builder, fintech, or agent calls to get a grounded verdict and a non-custodial session. It is the product.
+
+| Method | Path | What it does |
+|---|---|---|
+| POST | [`/v1/onboarding/link`](/api/onboarding#link) | Issue a session token for a wallet |
+| POST | [`/v1/onboarding/grant`](/api/onboarding#grant) | Grant the trade-only scope + provision a non-custodial wallet |
+| GET | [`/v1/agent/state`](/api/onboarding#agent-state) | The caller's own agent state, field-scoped |
+| POST | [`/v1/research`](/api/verdict) | **The verdict.** A grounded judgment with surviving dissent + citations |
+
+The contract is the OpenAPI spec at [`/openapi.json`](https://api.geckovision.tech/openapi.json) — generate your types from it.
+
+## Auth model
+
+- **Session token (HMAC, 7-day).** Mint it with `/v1/onboarding/link`, then send `Authorization: Bearer <session_token>` on every other call.
+- **Payment (x402).** Paid calls settle per-call over x402 on Solana. When `X402_MODE=stub` (testing), the payment path is exercised but **free** — no real money moves. Going live is an explicit, separate step.
+
+<Note>In stub mode every endpoint is free and returns real verdicts. You can build and test the entire loop before any wallet is funded.</Note>
+
+## The local control plane
+
+Base URL (local): `http://localhost:8271`. This is the **self-hosted runner** — the API your own machine serves when you run an agent locally and connect the app. It is paper-only and never settles real money. See [Control plane API](/api/control-plane).
+
+<CardGroup cols={2}>
+  <Card title="The verdict API" href="/api/verdict">POST /v1/research — the wedge.</Card>
+  <Card title="Onboarding & custody" href="/api/onboarding">Sessions, scopes, non-custodial wallets.</Card>
+</CardGroup>
