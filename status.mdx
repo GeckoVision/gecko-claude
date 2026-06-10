@@ -5,14 +5,13 @@ description: "What's live — every capability below is verified by automated te
 
 Every capability below is verified by automated tests in our CI pipeline. We publish what's proven — the rigor is the product.
 
-<Info>**26 verified capabilities** across 6 areas. This page is generated from our internal test-backed inventory.</Info>
+<Info>**22 verified capabilities** across 5 areas. This page is generated from our internal test-backed inventory.</Info>
 
 ## Control plane
 
 - GET /healthz
 - GET /market-temp
 - GET /vault
-- GET /arena/board
 - POST /backtest
 - POST/GET /agents (+ /{id}, start/stop/kill)
 - GET /orchestrator
@@ -23,12 +22,11 @@ Every capability below is verified by automated tests in our CI pipeline. We pub
 ## Safety & verification
 
 - Pre-trade safety gate (check_order + notional/daily caps)
-- Global kill-switch covers Kamino + based.bid paths
+- Global kill-switch covers Kamino + Jupiter paths
 
 ## Execution adapters
 
 - Jupiter swap adapter
-- based.bid lbp-buy/sell adapter
 - Kamino live-executor (tx-build sidecar)
 - Kamino paper sink
 
@@ -40,11 +38,6 @@ Every capability below is verified by automated tests in our CI pipeline. We pub
 - Profile baskets + orchestrator
 - Vault live-executor injection (paper)
 - Pegana depeg-risk → monitor + gate
-
-## Arena
-
-- Survival board (bucketed bands)
-- based.bid candle feed (GeckoTerminal)
 
 ## Rigor harness
 

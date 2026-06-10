@@ -20,6 +20,7 @@
               "introduction",
               "quickstart",
               "concepts",
+              "architecture",
               "ai-agents"
             ]
           },
@@ -37,13 +38,6 @@
               "vault/how-it-works",
               "vault/safety-monitor",
               "vault/custody"
-            ]
-          },
-          {
-            "group": "The Arena",
-            "pages": [
-              "arena/overview",
-              "arena/enter"
             ]
           },
           {
