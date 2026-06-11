@@ -21,6 +21,7 @@
               "quickstart",
               "concepts",
               "architecture",
+              "data-grounding",
               "ai-agents"
             ]
           },
@@ -44,7 +45,8 @@
             "group": "Reference",
             "pages": [
               "status",
-              "pricing"
+              "pricing",
+              "roadmap"
             ]
           }
         ]

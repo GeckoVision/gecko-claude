@@ -1,0 +1,29 @@
+---
+title: "Data & grounding"
+description: "What actually grounds a verdict — the independent data behind every act/pass/defer."
+---
+
+A verdict you can't trace is just a vibe. Every Gecko verdict is grounded in
+**independent** data + investor canon, and the sources are cited back to you.
+This is the difference between a verification layer and another agent guessing.
+
+## The evidence behind a verdict
+
+| Source | What it answers | Signal |
+|---|---|---|
+| **Pegana** | Is the collateral/yield asset holding its peg? | peg state + depeg risk (LSTs + stables) |
+| **CoinGecko** | *Where* is this actually traded? | venue count + concentration (thin/one-venue = risk) |
+| **QuickNode** (Solana RPC) | Can the token be rugged? | mint/freeze authority renounced? holder concentration |
+| **Investor canon** | What would a disciplined investor say? | Marks, Damodaran, Berkshire — the lens, not the hype |
+| **Market temperature** | Risk-on or risk-off right now? | regime read that gates entries |
+
+<Note>Sources roll out over time — peg-risk, venue concentration, and on-chain rug checks are live; smart-money flow, OHLCV depth, and live cited research are next ([Roadmap](/roadmap)).</Note>
+
+## Why independent matters
+
+Most agents grade their *own* thesis on their *own* data. Gecko grounds the
+verdict in **third-party** evidence it doesn't control and **external** investor
+frameworks — then attaches the **surviving dissent** so you see the strongest
+case *against* the trade, not just the case for it. The citations in every
+[verdict](/api/verdict) (`evidence_citations` + `framework_context`) point at
+exactly this data.
