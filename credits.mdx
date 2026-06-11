@@ -1,0 +1,37 @@
+---
+title: "Credits & funding"
+description: "Start with free credits, pay only when you fund — how Gecko bills."
+---
+
+Gecko bills with **credits**, not a subscription. You start with free credits,
+spend them per verdict, and only pay when your balance runs low. Funding settles
+the tab — no surprise invoices, no seat licenses.
+
+## How it works
+
+- **Credits** — a $-denominated balance on your account. A basic verdict costs a
+  few credits; the response carries your new balance.
+- **Free to start** — new accounts are granted starter credits, so you can run
+  the [onboard → verdict](/api/verdict) loop before funding anything.
+- **Pay as you go** — when credits run low, top up. Agents can also settle
+  per-call directly over **x402** on Solana — one signed transaction per request,
+  no account required.
+
+## Funding (Solana Pay) <Tag>coming soon</Tag>
+
+Top up from **any** Solana wallet via a Solana Pay request (QR / link) — USDC to
+the treasury, confirmed on-chain, credited to your balance. Until that ships,
+testing runs free in stub mode and agents settle per-call over x402.
+
+## Pricing
+
+| Tier | What you get |
+|---|---|
+| **Free credits** | Starter balance on every account — onboard + a few verdicts, no wallet. |
+| **Verdict** | A grounded `act`/`pass`/`defer` with surviving dissent + citations. |
+| **Self-hosted** | Run the agent yourself; pay only for oracle calls. |
+
+Billing is **pay-as-you-go over x402** — every paid call carries a Solana
+transaction signature. See [Pricing](/pricing) for the per-call rates.
+
+<Note>During user-testing the API runs in stub mode (`X402_MODE=stub`) — every call is **free** and exercises the full payment path, so you can validate the whole loop before any money moves.</Note>

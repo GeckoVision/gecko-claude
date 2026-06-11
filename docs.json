@@ -22,6 +22,7 @@
               "concepts",
               "architecture",
               "data-grounding",
+              "security",
               "ai-agents"
             ]
           },
@@ -46,6 +47,7 @@
             "pages": [
               "status",
               "pricing",
+              "credits",
               "roadmap"
             ]
           }
