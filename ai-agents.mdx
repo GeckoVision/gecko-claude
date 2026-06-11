@@ -45,10 +45,28 @@ curl -s -X POST https://api.geckovision.tech/v1/research \
 - **Auth:** `Authorization: Bearer <session_token>` on every call after `link`.
 - **Payment:** paid routes settle per-call over **x402** on Solana. In stub mode the path is free; the 402 challenge is advertised at [`/.well-known/x402`](https://api.geckovision.tech/.well-known/x402). See [the verdict API](/api/verdict).
 
-### 2. MCP — call the docs and the tools as an agent
+### 2. MCP — add Gecko's tools to your agent
 
-- **Docs MCP:** `https://docs.geckovision.tech/mcp` — a Model Context Protocol server over these docs, so an agent can search and read them as tools.
-- **Gecko MCP:** install via [`skill.md`](https://app.geckovision.tech/skill.md) to get `gecko_trade_research`, `gecko_research`, and the rest wired into a Claude Code session.
+Gecko runs a **hosted MCP server** — no install, just a URL. Add it and your agent gets `gecko_research`, `gecko_trade_research`, and the rest as callable tools.
+
+**Claude Code (one line):**
+
+```bash
+claude mcp add --transport http gecko https://api.geckovision.tech/mcp
+```
+
+**Any MCP client** (`.mcp.json` / `mcpServers`):
+
+```json
+{
+  "mcpServers": {
+    "gecko": { "url": "https://api.geckovision.tech/mcp" }
+  }
+}
+```
+
+- **Full toolkit + a local agent:** `Read app.geckovision.tech/skill.md` in Claude Code for the skills (trade-coach, trade-agent, grader).
+- **Docs MCP:** `https://docs.geckovision.tech/mcp` — search/read these docs as tools.
 
 ## The one rule
 

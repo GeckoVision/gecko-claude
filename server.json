@@ -1,0 +1,18 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.json",
+  "name": "tech.geckovision/gecko",
+  "description": "The safety & verification layer for trading agents. Grounded act/pass/defer verdicts with surviving dissent + citations, a pre-trade safety gate (peg-risk, venue concentration, rug/honeypot checks), and default-REJECT backtest rigor. Not another trading agent — the verifier that sits above any of them.",
+  "status": "active",
+  "version": "1.27.0",
+  "repository": {
+    "url": "https://github.com/GeckoVision/gecko-mcpay-api",
+    "source": "github"
+  },
+  "websiteUrl": "https://docs.geckovision.tech",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.geckovision.tech/mcp"
+    }
+  ]
+}
