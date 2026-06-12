@@ -1,31 +1,63 @@
 ---
 title: "Introduction"
-description: "Gecko is the safety & verification layer for trading agents — not another agent."
+description: "Gecko is the independent verification layer for autonomous trading — the outside check on an agent's decisions, before the money moves."
 ---
 
-## The wedge
+## The gap
 
-Every trading agent tells you it's winning. **Gecko tells you when it's wrong.**
+An AI agent can move real money on its own now. But the only thing checking its
+decisions is **itself** — it picks the trade, places it, and grades its own
+work. An actor can't be its own referee.
 
-Gecko is a verification layer that sits *above* any trading agent:
+**Gecko is the outside check.** Before an agent acts, Gecko returns a verdict on
+whether the trade is sound — with the reasoning behind it and the **dissenting
+view attached instead of hidden**.
 
-- **Gates every order** against a pre-trade safety check (the market-temperature read, price-impact caps, deny-default rules).
-- **Monitors every yield position** against a hurdle rate and a liquidation buffer — and acts before a position bleeds.
-- **Grades strategies** with default-REJECT backtest rigor (CPCV, PBO, Deflated Sharpe). An honest null is a valid, cheap outcome.
+## The Receipt
 
-The trading bot and the profit vault you'll see in these docs are **proof artifacts** — they exist to demonstrate the verification layer on live capital. The product is the layer, not the bot.
-
-## Why it matters
-
-The failure mode the product exists to fix: an agent that looks profitable on an in-sample backtest, deployed without rigor, that quietly loses money in chop or gets liquidated on a leverage leg. Gecko is the adult in the room — the part that says *no* when the edge isn't real.
-
-## How it's built
-
-- **Non-custodial.** Signing happens in the OKX Agentic Wallet TEE (keys never leave the enclave) or a scoped embedded wallet. Gecko never holds your private key.
-- **Pay-as-you-go.** Verdicts are priced per call via x402. Self-hosting is free.
-- **Local-first.** Run the agent on your own machine; connect the app as a control surface.
+Every verdict comes back as a **Receipt**: a clear **act / pass / defer** call,
+the opinions that disagreed, and the sources it's grounded in. It's the one
+thing an agent can't issue for itself — and the thing a fund manager or a
+treasury can put in front of their community to show a decision was checked by
+someone with **nothing to gain from the trade**.
 
 <CardGroup cols={2}>
-  <Card title="Quickstart" href="/quickstart">Install and connect an agent.</Card>
-  <Card title="Concepts" href="/concepts">Oracle vs bot, custody, hurdle, buffer.</Card>
+  <Card title="See a verdict" href="/api/verdict">The act / pass / defer call, with dissent + sources.</Card>
+  <Card title="Quickstart" href="/quickstart">Your first Receipt in a few minutes.</Card>
+</CardGroup>
+
+## Why it has to be independent
+
+A self-grading agent is the failure mode the product exists to fix. Gecko works
+because it sits *outside* the trade:
+
+- **No position in the outcome.** Gecko decides nothing, holds nothing, and
+  never takes a cut of the trade. We earn on the verdict — **including the "no."**
+- **Grounded in outside judgment,** not the agent's own story — the world's best
+  investor thinking plus live market and on-chain data.
+- **The dissent survives.** A `pass` or a `defer` with a real objection attached
+  is the product working, not failing.
+
+## How it's built (the part that protects you)
+
+- **Non-custodial.** Gecko never holds your money or your keys. Signing stays
+  inside a secure enclave or your own scoped wallet.
+- **The off-switch can't trap you.** It can halt trading; it can **never** block
+  a withdrawal to your own wallet.
+- **Pay per verdict** — including the "no." Self-hosting is free. *(During early
+  user-testing, calls run free in test mode — the full path works end to end,
+  no money moves.)*
+
+## Where we are, honestly
+
+The API is **live in production today**, and our own trading agent runs every
+decision through it as standing proof (in paper-trading mode — real prices, no
+real money at risk yet). Any agent can call it. We're a two-person product and
+engineering team, building in public every week.
+
+<Note>Execution is becoming a commodity. Independent judgment isn't. That's the layer Gecko is.</Note>
+
+<CardGroup cols={2}>
+  <Card title="Concepts" href="/concepts">The Receipt, the verdict, independence, custody.</Card>
+  <Card title="For AI agents" href="/ai-agents">Add Gecko to your agent in one line.</Card>
 </CardGroup>

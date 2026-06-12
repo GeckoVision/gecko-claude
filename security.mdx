@@ -1,0 +1,43 @@
+---
+title: "Security & custody"
+description: "Non-custodial by construction — Gecko verifies, it never holds your keys or your funds."
+---
+
+Gecko is a **verification layer**, not a custodian. It judges trades; it never
+holds your private key and never holds your funds. The security model is built so
+that even a fully compromised Gecko cannot move your money to anyone but you.
+
+## Non-custodial, by construction
+
+- **Keys never leave the enclave.** Signing happens inside the **OKX Agentic
+  Wallet TEE** (the private key is generated in, and never leaves, the secure
+  enclave) or a **scoped embedded wallet**. Gecko sees a public key, never a
+  private key.
+- **Withdrawal is never gated.** The kill-switch can halt *execution* — it can
+  **never** block you from withdrawing to your own wallet. Stopping trading and
+  trapping funds are different powers; Gecko only has the first.
+- **Allowlist = your own address.** A scoped wallet's withdraw allowlist is the
+  wallet that owns the session. Funds can only ever move *back to you*.
+
+## Verified, not asserted
+
+We don't just claim the custody guarantee — we tested it against the real signing
+engine on devnet:
+
+- A transfer **to your own address** → allowed.
+- A transfer **to a foreign address** → **denied** by policy.
+- A non-allowlisted program call → **denied**.
+- Post-revoke → **everything** denied (deny-by-default).
+- A foreign transfer **nested as a CPI inside an allowed program call** → the one
+  case the policy engine does **not** inspect, so live custody signing stays
+  gated until a custom on-chain probe closes it. We found that hole ourselves,
+  with a purpose-built [custody-probe](https://github.com/GeckoVision/gecko-programs)
+  program — before shipping, not after.
+
+## Scope, not blanket approval
+
+A granted agent gets a **trade-only** scope (e.g. `swap`, `lend`) bound to a
+per-tx cap and an allowed-venue set — not a blanket signer. Revoke turns it
+deny-all in one call; withdrawal still works.
+
+<Note>An agent never hands Gecko a private key. The most Gecko can do with a compromised scope is *stop* trading — never redirect your funds. That asymmetry is the whole design.</Note>

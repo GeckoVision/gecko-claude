@@ -1,0 +1,82 @@
+---
+title: "The verdict API"
+description: "POST /v1/research — a grounded judgment with surviving dissent and citations. The wedge."
+---
+
+This is the product. One call, one grounded verdict on whether an action is safe and sound — with the strongest surviving argument *against* it, and citations to external investor canon.
+
+```
+POST https://api.geckovision.tech/v1/research
+Authorization: Bearer <session_token>
+Content-Type: application/json
+```
+
+## Request
+
+```json
+{
+  "idea": "deposit USDC into Kamino",
+  "protocol": "kamino",
+  "vertical": "dex"
+}
+```
+
+| Field | Type | Notes |
+|---|---|---|
+| `idea` | string | The action in plain language. |
+| `protocol` | string | The venue/protocol the idea touches (`kamino`, `drift`, `jupiter`, …). |
+| `vertical` | string? | Optional. `dex` is the default lens. |
+
+The tier is **forced to `basic`** server-side — there is no tier toggle to expose. A basic verdict is synchronous and takes **~30–40s** (seven specialists debate). Show a real loading state.
+
+## Response — `TradePanelVerdict`
+
+```json
+{
+  "verdict": "pass",
+  "confidence": 0.62,
+  "dissent": [
+    { "voice": "strategist", "stance": "oppose",
+      "verbatim": "The depeg-tail on the collateral leg isn't priced — a 3% wick liquidates the Multiply position before the monitor can rotate.",
+      "on_topic": "collateral depeg risk" }
+  ],
+  "evidence_citations": [
+    { "id": "c1", "source": "Kamino docs", "url": "https://...",
+      "provider_kind": "protocol_docs", "freshness_tier": "static",
+      "snippet": "Liquidation LTV for the USDC/SOL market is ..." }
+  ],
+  "framework_context": [
+    { "id": "f1", "source": "Howard Marks — Risk", "url": "https://...",
+      "provider_kind": "investor_canon", "freshness_tier": "static",
+      "snippet": "Risk means more things can happen than will happen ..." }
+  ],
+  "key_drivers": ["hurdle not cleared net of fees", "buffer thin vs predicted downside"],
+  "blocker_questions": ["What is the operating LTV at entry?"],
+  "dissent_count": 1
+}
+```
+
+| Field | Meaning |
+|---|---|
+| `verdict` | `"act"` · `"pass"` · `"defer"`. **A `pass` or `defer` is the product** — *don't take this trade.* |
+| `confidence` | 0–1. |
+| `dissent[]` | The opposing voices that **survived** the debate. `stance` is `"oppose"` or `"abstain"`. Make it prominent — a verdict with no honest dissent is a red flag, not a green light. |
+| `evidence_citations[]` | The data — protocol docs, market reads. |
+| `framework_context[]` | The lens — external investor canon (Marks, Damodaran, Berkshire letters). |
+| `key_drivers[]` · `blocker_questions[]` | Why, and what's still unknown. |
+
+Citation `url` may be a hash fallback rather than a live link — guard before rendering an anchor. Receipt fields (`tx_signature`, `solscan_url`, `settlement_mode`, `backtest`) are present only when a verdict settles on-chain in live mode; in stub they are null — hide them.
+
+## Pricing & payment
+
+A verdict is priced per call over x402 (see [Pricing](/pricing)). The route is x402-gated **only when `X402_MODE != stub`** — in stub mode the call is free and the full payment path is still exercised.
+
+## Errors
+
+| Code | Meaning |
+|---|---|
+| `401` | Missing/expired session token → re-onboard. |
+| `422` | Validation error on the body. |
+| `500` | Panel error (one-line message). Retry. |
+
+<Note>There is no `400` on this route. Seed the wedge with `{ "idea": "deposit USDC into Kamino", "protocol": "kamino", "vertical": "dex" }` — it reliably returns a verdict with dissent and citations.</Note>

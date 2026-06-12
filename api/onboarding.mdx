@@ -1,0 +1,94 @@
+---
+title: "Onboarding & custody"
+description: "Mint a session, grant a trade-only scope, provision a non-custodial wallet, read agent state."
+---
+
+Three calls take a user from a wallet address to a live, non-custodial agent the verdict API can gate. Custody is **always user-owned** — Gecko never holds the raw key, and withdrawals are never gated.
+
+## 1. Link — mint a session {#link}
+
+```
+POST https://api.geckovision.tech/v1/onboarding/link
+Content-Type: application/json
+```
+
+```json
+{ "wallet_address": "8QURsrdas…NQxV" }
+```
+
+`wallet_address` is 32–64 chars. Returns a 7-day HMAC session token:
+
+```json
+{
+  "session_token": "…",
+  "user_id": "u_9f3a…",
+  "wallet_address": "8QURsrdas…NQxV",
+  "custody": "user-owned"
+}
+```
+
+Store `session_token` and send it as `Authorization: Bearer <session_token>` on every other call.
+
+## 2. Grant — scope + provision {#grant}
+
+```
+POST https://api.geckovision.tech/v1/onboarding/grant
+Authorization: Bearer <session_token>
+```
+
+Grants the **trade-only** scope, provisions a non-custodial wallet server-side (when a wallet provider is enabled), and writes the ownership row that binds the user to their agent. Returns the full scope:
+
+```json
+{
+  "user_id": "u_9f3a…",
+  "allowed_actions": ["swap", "lend"],
+  "withdraw_allowlist": ["8QURsrdas…NQxV"],
+  "revoked": false
+}
+```
+
+The `withdraw_allowlist` is the **user's own address** — funds can only ever move back to the wallet that owns the session. The bind is best-effort: a `200` here does not guarantee `/v1/agent/state` is immediately `200` — retry on `404` for ~10s after granting.
+
+<Note>Custody options: signing in the **OKX Agentic Wallet TEE** (key generated in and never leaving the enclave) or a **scoped embedded wallet** (per-tx cap + allowed venues) for one-click onboarding. Never show "we hold your funds" — it isn't true.</Note>
+
+## 3. Agent state — read your own {#agent-state}
+
+```
+GET https://api.geckovision.tech/v1/agent/state
+Authorization: Bearer <session_token>
+```
+
+Returns the caller's **own** agent, field-scoped:
+
+```json
+{
+  "agent_id": "hosted-setupc-001",
+  "strategy": "setup_c",
+  "profile": "moderate",
+  "state": {
+    "positions": [],
+    "realized_pnl_today": 0,
+    "wins_today": 0, "losses_today": 0,
+    "daily_trades": 0,
+    "still_alive_at": "2026-06-10T05:00:00Z",
+    "poll_count": 6340,
+    "updated_at": "2026-06-10T05:00:00Z"
+  }
+}
+```
+
+- `state: null` → the agent has no document yet (show "warming up").
+- `404` → no agent bound to this user (send them back to onboarding).
+- Lead the UI with **liveness + positions + deferral discipline** — the agent declining weak setups *is* the product. Never render PnL as the hero.
+
+## Also available
+
+| Method | Path | What |
+|---|---|---|
+| GET | `/v1/onboarding/me` | The current session's identity + scope |
+| POST | `/v1/onboarding/revoke` | Revoke the scope (deny-all). Withdrawal stays available — it is never kill-switch-gated. |
+
+<CardGroup cols={2}>
+  <Card title="Get a verdict" href="/api/verdict">Now ask the oracle.</Card>
+  <Card title="Custody, in depth" href="/vault/custody">TEE keys, scoped wallets.</Card>
+</CardGroup>

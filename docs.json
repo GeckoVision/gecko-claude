@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Gecko",
-  "description": "The safety & verification layer for trading agents. Every trade gated, every yield position monitored.",
+  "description": "The independent verification layer for autonomous trading. Before an agent acts, Gecko returns a verdict — act, pass, or defer — with the reasoning and the dissent attached.",
   "colors": {
     "primary": "#448aff",
     "light": "#82b1ff",
@@ -19,7 +19,12 @@
             "pages": [
               "introduction",
               "quickstart",
-              "concepts"
+              "concepts",
+              "proof",
+              "architecture",
+              "data-grounding",
+              "security",
+              "ai-agents"
             ]
           },
           {
@@ -39,20 +44,38 @@
             ]
           },
           {
-            "group": "The Arena",
-            "pages": [
-              "arena/overview",
-              "arena/enter"
-            ]
-          },
-          {
             "group": "Reference",
             "pages": [
-              "api/control-plane",
-              "pricing"
+              "status",
+              "pricing",
+              "credits",
+              "roadmap"
             ]
           }
         ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Hosted verification API",
+            "pages": [
+              "api/overview",
+              "api/verdict",
+              "api/onboarding"
+            ]
+          },
+          {
+            "group": "Self-hosted",
+            "pages": [
+              "api/control-plane"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Playground",
+        "openapi": "https://api.geckovision.tech/openapi.json"
       }
     ]
   },
@@ -65,7 +88,7 @@
     ],
     "primary": {
       "type": "github",
-      "href": "https://github.com/ernanibmurtinho/gecko-claude"
+      "href": "https://github.com/GeckoVision/gecko-claude"
     }
   },
   "footer": {

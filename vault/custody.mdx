@@ -14,7 +14,7 @@ Every venue follows the same shape:
 build unsigned tx  →  safety gate  →  OKX TEE signs + broadcasts  →  txHash
 ```
 
-Kamino (sidecar), Jupiter swaps (sidecar), and based.bid (their API) all conform to it. Validated on mainnet with a real round-trip deposit + withdraw.
+Kamino (sidecar) and Jupiter swaps (sidecar) conform to it. Validated on mainnet with a real round-trip deposit + withdraw.
 
 ## Pay-as-you-go
 Verdicts are billed per call over **x402**. Self-hosting the agent is free; you pay only for oracle calls. `X402_MODE=stub` during testing costs nothing and exercises the full code path.

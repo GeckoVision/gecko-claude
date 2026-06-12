@@ -15,7 +15,6 @@ rate and a liquidation buffer, and grades strategies with default-REJECT backtes
 - [Build an Agent](/build/set-a-strategy): strategy spec → backtest → deploy
 - [Backtest rigor](/build/backtest): the §5 verdict — DEPLOY / PAPER ONLY / REJECT, with honest nulls
 - [Profit Vault](/vault/how-it-works): Kamino yield with a safety monitor
-- [The Arena](/arena/overview): based.bid verified-safe agent battle
 - [API Reference](/api/control-plane): the control-plane endpoints
 - [Pricing](/pricing): self-hosted free; hosted pay-as-you-go
 
