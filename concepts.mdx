@@ -1,19 +1,48 @@
 ---
 title: "Concepts"
-description: "The vocabulary: oracle vs bot, custody, verdict & dissent, hurdle rate, liquidation buffer."
+description: "The vocabulary: the Receipt, the verdict, surviving dissent, independence, custody."
 ---
 
-## Oracle, not bot
-A **bot** executes. An **oracle** judges. Gecko is the oracle: it produces a *verdict* on whether an action is safe and sound, and any bot — ours or yours — acts on it. The execution venue (OKX, Jupiter, Kamino, Drift) is swappable plumbing.
+## The Receipt
 
-## Verdict & dissent
-A verdict is the panel's judgment plus the **surviving dissent** — the strongest argument *against* the action that wasn't refuted. A verdict with no honest dissent is a red flag, not a green light. Backtest verdicts are graded `DEPLOY / PAPER ONLY / REJECT`, and a clean **null** (no edge) is a valid result.
+The thing Gecko hands back. A **Receipt** is a verdict on a proposed move plus
+everything behind it: the call, the opinions that disagreed, and the sources.
+It's signed and shareable — an audit artifact you can put in front of a board or
+a community to show the decision was checked.
 
-## Non-custodial custody
-Signing happens inside the **OKX Agentic Wallet TEE** — the private key is generated in and never leaves the enclave. Alternatively, a **scoped embedded wallet** (per-tx cap, allowed venues) can be provisioned for one-click onboarding. Either way, Gecko never holds your raw key.
+## The verdict: act / pass / defer
 
-## Hurdle rate
-A yield position must beat a **hurdle** to be worth the risk. Default is a Brazilian CDB-after-tax (~12%); a crypto-only hurdle is ~5.5%. Below the hurdle, the monitor rotates or exits.
+Every Receipt carries one of three calls:
 
-## Liquidation buffer
-For any leveraged position, the buffer is `1 − operating_LTV / liquidation_LTV` — how far collateral can fall before liquidation. The monitor compares the buffer to a **predicted downside** (derived from the same market-temperature read that gates trades) and de-leverages or exits before the buffer is breached.
+- **act** — the move is sound; proceed.
+- **pass** — don't do it; here's the reason.
+- **defer** — not now; wait for the condition named in the Receipt.
+
+A `pass` or a `defer` is the product working, not failing.
+
+## Surviving dissent
+
+Gecko convenes a panel of independent expert voices, each arguing the move from
+a different angle. The strongest argument *against* the move — the one that
+didn't get refuted — **stays in the answer**, with its source. A verdict with no
+honest dissent is a red flag, not a green light.
+
+## Independence
+
+Gecko has no position in the trade. It decides nothing, holds nothing, and never
+takes a cut. That's why it can issue a check an agent can't issue about itself —
+the same reason a company can't audit its own books.
+
+## Non-custodial
+
+Gecko never holds your money or your keys. Signing stays inside a secure enclave
+or your own scoped wallet (with a per-trade cap and an allowed-venue list). The
+off-switch can halt trading — but it can **never** block a withdrawal to your
+own wallet.
+
+## The proof agents
+
+The trading agent and the profit vault you'll see in these docs are **proof
+artifacts** — they exist to run real decisions through the verification layer so
+you can watch it work (on live prices, in paper-trading mode). The product is the
+**layer**, not the agents.
