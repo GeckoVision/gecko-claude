@@ -249,8 +249,9 @@ Run `gecko-mcp economics <session_id>` after any session for the full breakdown.
 
 ## Sister repos
 
-- [`gecko-mcpay-api`](https://github.com/ernanibmurtinho/gecko-mcpay-api) — Python backend (uv workspace: SDK, MCP server, FastAPI, CLI).
-- `gecko-mcpay-app` — Next.js frontend at `app.geckovision.tech` (v3).
+- [`gecko-mcpay-api`](https://github.com/GeckoVision/gecko-mcpay-api) — Python backend (uv workspace: SDK, MCP server, FastAPI, CLI).
+- [`gecko-mcpay-app`](https://github.com/GeckoVision/gecko-mcpay-app) — Next.js frontend at `app.geckovision.tech`.
+- [`gecko-programs`](https://github.com/GeckoVision/gecko-programs) — Solana programs (custody-probe + on-chain ops).
 
 ---
 
