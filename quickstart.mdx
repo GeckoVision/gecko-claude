@@ -1,47 +1,71 @@
 ---
 title: "Quickstart"
-description: "Install Gecko, launch the control plane, connect the app."
+description: "Your first Receipt in a few minutes — add Gecko to an agent, or call the API directly."
 ---
 
-## 1. Install
+A **Receipt** is Gecko's answer on a proposed move: a verdict (act / pass /
+defer), the opinions that disagreed, and the sources. Here's how to get one.
 
-In Claude Code, point at the skill manifest:
+## Option A — add Gecko to your agent (one line)
 
+Gecko runs a hosted server, so there's nothing to install. In Claude Code:
+
+```bash
+claude mcp add --transport http gecko https://api.geckovision.tech/mcp
 ```
-Read https://app.geckovision.tech/skill.md and follow the instructions
+
+Now your agent has Gecko's tools. Ask it to check a move before it acts:
+
+```text
+Before you do anything, ask Gecko whether depositing USDC into Kamino is sound
+right now, and show me the verdict and the dissent.
 ```
 
-Or run the installer directly:
+You get back a verdict with the reasoning and the dissenting view attached —
+the agent's own decision, now checked by an outside layer.
+
+Any MCP-compatible agent works (Claude, OpenAI, LangChain, and others):
+
+```json
+{ "mcpServers": { "gecko": { "url": "https://api.geckovision.tech/mcp" } } }
+```
+
+## Option B — call the API directly
+
+```bash
+# 1. Mint a session for a wallet (we record the public address only)
+curl -s -X POST https://api.geckovision.tech/v1/onboarding/link \
+  -H 'Content-Type: application/json' \
+  -d '{"wallet_address":"<your-wallet-address>"}'        # → { session_token }
+
+# 2. Ask for a verdict
+curl -s -X POST https://api.geckovision.tech/v1/research \
+  -H "Authorization: Bearer <session_token>" \
+  -H 'Content-Type: application/json' \
+  -d '{"idea":"deposit USDC into Kamino","protocol":"kamino","vertical":"dex"}'
+```
+
+The full contract is at [the verdict API](/api/verdict), with a live "try it"
+console in the **API Playground** tab.
+
+<Note>During early user-testing, calls run **free in test mode** — the whole path works end to end and no money moves. See [Pricing](/pricing).</Note>
+
+## Option C — run the proof agent yourself
+
+Want to watch the verification layer drive a live (paper-trading) agent on your
+own machine? Install the skills and launch the local control plane:
 
 ```bash
 curl -fsSL https://app.geckovision.tech/install.sh | bash
-```
-
-This installs the Gecko skills (`gecko-trade-coach`, `gecko-trade-agent`, the grader) and wires the MCP server.
-
-## 2. Launch the control plane
-
-The control plane is the local API the app and your agents talk to. Paper mode by default — no real money, no live settlement.
-
-```bash
-bash launch_control_plane.sh    # serves on :8271
-```
-
-Verify:
-
-```bash
+bash launch_control_plane.sh        # serves on :8271, paper mode by default
 curl localhost:8271/healthz
 ```
 
-## 3. Connect the app (optional)
-
-Set the control URL so the app at `app.geckovision.tech` reads your local agent:
+Then connect the app as a control surface:
 
 ```bash
 export GECKO_AGENT_CONTROL_URL=http://localhost:8271
 ```
-
-## What's next
 
 <CardGroup cols={3}>
   <Card title="Set a strategy" href="/build/set-a-strategy" />
@@ -49,4 +73,4 @@ export GECKO_AGENT_CONTROL_URL=http://localhost:8271
   <Card title="Deploy it" href="/build/deploy" />
 </CardGroup>
 
-<Note>Everything in Quickstart runs in **paper mode** with `X402_MODE=stub`. Going live with real funds is an explicit, separate step.</Note>
+<Note>Everything here runs in **paper mode** with real prices and no real money. Going live is an explicit, separate step.</Note>
