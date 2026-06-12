@@ -35,7 +35,7 @@ curl -s -X POST https://api.geckovision.tech/v1/onboarding/link \
   -H 'Content-Type: application/json' \
   -d '{"wallet_address":"<wallet>"}'        # → { session_token, ... }
 
-# 2. Ask the oracle (the wedge: a pass/defer with surviving dissent + citations)
+# 2. Ask for a verdict — the Receipt: act/pass/defer with surviving dissent + sources
 curl -s -X POST https://api.geckovision.tech/v1/research \
   -H "Authorization: Bearer <session_token>" \
   -H 'Content-Type: application/json' \
